@@ -3,23 +3,29 @@
 <head>
   <meta charset="utf-8">
   
-  <title>回文平方数 | 侏罗纪公园</title>
+  <title>python抓取数据技巧和问题总结 | 侏罗纪公园</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="题目
+  <meta name="description" content="Python文件与idle关联我在windows环境下开发Python时，一般用sublime text 2 写Python代码，用安装Python时自带的IDLE来调试。有时候安装程序并没有帮你绑定IDLE和.py文件。这时候，需要我们自己去绑定。步骤：
 
-给定一个进制B(2&amp;lt;=B&amp;lt;=20十进制)，输出所有的大于等于1小于等于300且它的平方&amp;gt;用B进制表示时是回文数的数。用’A’,’B’……表示10，11等等。输入共一行，一个单独的整数B(B用十进制表示)。输出每行两个数字，第二个数是第一个数的平方，且第二个数是回文数。">
+右击.py文件，选择打开方式
+选择在这台电脑上选择应用程序（我的是win8.1）
+选择你Python安装路径下的一个文件夹里面的idle.b">
 <meta property="og:type" content="article">
-<meta property="og:title" content="回文平方数">
-<meta property="og:url" content="http://zhuluoji.info/2013/04/20/2013-04-20-回文平方数 解题记录/index.html">
+<meta property="og:title" content="python抓取数据技巧和问题总结">
+<meta property="og:url" content="http://zhuluoji.info/2015/01/27/python抓取数据技巧和问题总结/index.html">
 <meta property="og:site_name" content="侏罗纪公园">
-<meta property="og:description" content="题目
+<meta property="og:description" content="Python文件与idle关联我在windows环境下开发Python时，一般用sublime text 2 写Python代码，用安装Python时自带的IDLE来调试。有时候安装程序并没有帮你绑定IDLE和.py文件。这时候，需要我们自己去绑定。步骤：
 
-给定一个进制B(2&amp;lt;=B&amp;lt;=20十进制)，输出所有的大于等于1小于等于300且它的平方&amp;gt;用B进制表示时是回文数的数。用’A’,’B’……表示10，11等等。输入共一行，一个单独的整数B(B用十进制表示)。输出每行两个数字，第二个数是第一个数的平方，且第二个数是回文数。">
+右击.py文件，选择打开方式
+选择在这台电脑上选择应用程序（我的是win8.1）
+选择你Python安装路径下的一个文件夹里面的idle.b">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="回文平方数">
-<meta name="twitter:description" content="题目
+<meta name="twitter:title" content="python抓取数据技巧和问题总结">
+<meta name="twitter:description" content="Python文件与idle关联我在windows环境下开发Python时，一般用sublime text 2 写Python代码，用安装Python时自带的IDLE来调试。有时候安装程序并没有帮你绑定IDLE和.py文件。这时候，需要我们自己去绑定。步骤：
 
-给定一个进制B(2&amp;lt;=B&amp;lt;=20十进制)，输出所有的大于等于1小于等于300且它的平方&amp;gt;用B进制表示时是回文数的数。用’A’,’B’……表示10，11等等。输入共一行，一个单独的整数B(B用十进制表示)。输出每行两个数字，第二个数是第一个数的平方，且第二个数是回文数。">
+右击.py文件，选择打开方式
+选择在这台电脑上选择应用程序（我的是win8.1）
+选择你Python安装路径下的一个文件夹里面的idle.b">
   
     <link rel="alternative" href="/atom.xml" title="侏罗纪公园" type="application/atom+xml">
   
@@ -69,16 +75,12 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-2013-04-20-回文平方数 解题记录" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-python抓取数据技巧和问题总结" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2013/04/20/2013-04-20-回文平方数 解题记录/" class="article-date">
-  <time datetime="2013-04-19T16:00:00.000Z" itemprop="datePublished">2013-04-20</time>
+    <a href="/2015/01/27/python抓取数据技巧和问题总结/" class="article-date">
+  <time datetime="2015-01-26T16:00:00.000Z" itemprop="datePublished">2015-01-27</time>
 </a>
     
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/OJ解题报告/">OJ解题报告</a>
-  </div>
-
   </div>
   <div class="article-inner">
     
@@ -87,7 +89,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      回文平方数
+      python抓取数据技巧和问题总结
     </h1>
   
 
@@ -95,23 +97,27 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>题目</p>
-<blockquote>
-<p>给定一个进制B(2&lt;=B&lt;=20十进制)，输出所有的大于等于1小于等于300且它的平方&gt;用B进制表示时是回文数的数。用’A’,’B’……表示10，11等等。<br>输入<br>共一行，一个单独的整数B(B用十进制表示)。<br>输出<br>每行两个数字，第二个数是第一个数的平方，且第二个数是回文数。<br><a id="more"></a></p>
-<h2 id="思路：">思路：</h2><p>主要两个函数<br>一个函数判断字符串是否为回文字符串；<br>另一个函数将一个数字转换成为B进制并且以字符串形式输出；</p>
-<h2 id="关键点：">关键点：</h2><p>将一个整数，转换为字符表示并且加到一个string里：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">char</span> temp;</span><br><span class="line"><span class="built_in">string</span> s;</span><br><span class="line"><span class="comment">//////</span></span><br><span class="line">temp=a[j]+<span class="number">48</span>;<span class="comment">//or 55</span></span><br><span class="line">s+=temp;</span><br><span class="line"><span class="comment">/////</span></span><br></pre></td></tr></table></figure></p>
-</blockquote>
-
+        <h3 id="Python文件与idle关联">Python文件与idle关联</h3><p>我在windows环境下开发Python时，一般用sublime text 2 写Python代码，用安装Python时自带的IDLE来调试。有时候安装程序并没有帮你绑定IDLE和<code>.py</code>文件。这时候，需要我们自己去绑定。<br>步骤：</p>
+<ol>
+<li>右击<code>.py</code>文件，选择打开方式</li>
+<li>选择<code>在这台电脑上选择应用程序</code>（我的是win8.1）</li>
+<li>选择你Python安装路径下的一个文件夹里面的<code>idle.bat</code>文件来打开。比如我的是在<code>C:\Python33\Lib\idlelib\idle.bat</code><br>之后你就可以直接双击<code>.py</code>文件用IDLE打开，然后用F5，去运行并调试你写的程序了</li>
+</ol>
+<h3 id="IDLE提示缩进错误">IDLE提示缩进错误</h3><p>出现这个错误的原因可能是，Python自带的IDLE的tab的缩进和你的编辑器（比如sublime text 2）的tab 默认缩进大小不同，而且IDLE本身它对space和tab是区分的。所以经常会出现虽然你视觉上感觉不到缩进有错误，但是执行程序的时候，IDLE会报错。<br>解决方法是这样的，在IELD中，选择菜单栏的Edit-&gt;Select ALL，然后选择菜单栏的Format-&gt;Untabify Region。就可以了。<br>这个做法的作用是，把所有的tab替换成了space。</p>
+<h3 id="在idle里面打印网页中文是乱码">在idle里面打印网页中文是乱码</h3><p>windows系统下，用Python抓取网页时，在通过read()函数读取了网页之后，如果通过print打印出网页不经过编码转换，可能会出现网页中的中文字符以乱码的形式出现如下图所示。<br>这时的解决方法是，用gbk解码得到的网页。<br>把<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(html)</span><br></pre></td></tr></table></figure></p>
+<p>改成<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(html.decode(<span class="string">"gbk"</span>))</span><br></pre></td></tr></table></figure></p>
+<p>这个步骤的作用，是将以其它编码形式（一般是GBK）编码的中文解码成Unicode编码。</p>
+<h3 id="爬虫程序一段时间就假死">爬虫程序一段时间就假死</h3><h3 id="单线程太慢">单线程太慢</h3><h3 id="sublime_text_2编译任何语言控制台无输出">sublime text 2编译任何语言控制台无输出</h3>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://zhuluoji.info/2013/04/20/2013-04-20-回文平方数 解题记录/" data-id="ci7q6lcag001xpgfzzhnhd72o" class="article-share-link bdsharebuttonbox" data-cmd="more">分享</a>
+      <a data-url="http://zhuluoji.info/2015/01/27/python抓取数据技巧和问题总结/" data-id="ci811wdhr001pegfz66b4iao1" class="article-share-link bdsharebuttonbox" data-cmd="more">分享</a>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"1","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"16"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
       
-        <a href="/2013/04/20/2013-04-20-回文平方数 解题记录/#comments" class="article-comment-link">留言</a>
+        <a href="/2015/01/27/python抓取数据技巧和问题总结/#comments" class="article-comment-link">留言</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/解题报告/">解题报告</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
 
     </footer>
   </div>
@@ -119,15 +125,11 @@
     
 <nav id="article-nav">
   
-    <a href="/2013/04/23/2014-04-23-最简单WiFi分享程序/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          5分钟制作最简单WiFi分享程序
-        
-      </div>
-    </a>
   
+    <a href="/2014/07/21/readlist之知乎名人/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">readlist之知乎名人</div>
+    </a>
   
 </nav>
 
@@ -137,7 +139,7 @@
 
 <section id="comments">
   <!-- 多说评论框 start -->
-    <div class="ds-thread" data-thread-key="post-2013-04-20-回文平方数 解题记录" data-title="回文平方数" data-url="http://zhuluoji.info/2013/04/20/2013-04-20-回文平方数 解题记录/"></div>
+    <div class="ds-thread" data-thread-key="post-python抓取数据技巧和问题总结" data-title="python抓取数据技巧和问题总结" data-url="http://zhuluoji.info/2015/01/27/python抓取数据技巧和问题总结/"></div>
   <!-- 多说评论框 end -->
   <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
   <script type="text/javascript">
@@ -200,15 +202,15 @@
       <ul>
         
           <li>
-            <a href="/2015/01/27/2015-01-27-python抓取数据技巧和问题总结/">python抓取数据技巧和问题总结</a>
-          </li>
-        
-          <li>
-            <a href="/2014/07/21/readlist之个人博客/">readlist之个人博客</a>
+            <a href="/2015/01/27/python抓取数据技巧和问题总结/">python抓取数据技巧和问题总结</a>
           </li>
         
           <li>
             <a href="/2014/07/21/readlist之知乎名人/">readlist之知乎名人</a>
+          </li>
+        
+          <li>
+            <a href="/2014/07/21/readlist之个人博客/">readlist之个人博客</a>
           </li>
         
           <li>
