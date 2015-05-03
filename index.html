@@ -29,8 +29,18 @@
 
 
 
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?e1772f6cae00bbcff36e1b832a32d8cb";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
-  <title> PROFessORZ </title>
+
+  <title> PROForz </title>
 </head>
 
 <body>
@@ -47,7 +57,7 @@
       <span class="logo">
         <i class="icon-logo"></i>
       </span>
-      <span class="site-title">PROFessORZ</span>
+      <span class="site-title">PROForz</span>
   </a>
   <span class="logo-line-after"><i></i></span>
 </h1>
@@ -107,7 +117,7 @@
           
           
             
-              <a class="post-title-link" href="/2015/01/27/python抓取数据技巧和问题总结/">
+              <a class="post-title-link" href="/2015/01/27/20150127/">
                 python抓取数据技巧和问题总结
               </a>
             
@@ -130,8 +140,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/01/27/python抓取数据技巧和问题总结/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2015/01/27/python抓取数据技巧和问题总结/"></span>
+            <a href="/2015/01/27/20150127/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/01/27/20150127/"></span>
             </a>
           </span>
           
@@ -151,13 +161,12 @@
 <ol>
 <li>右击<code>.py</code>文件，选择打开方式</li>
 <li>选择<code>在这台电脑上选择应用程序</code>（我的是win8.1）</li>
-<li>选择你Python安装路径下的一个文件夹里面的<code>idle.bat</code>文件来打开。比如我的是在<code>C:\Python33\Lib\idlelib\idle.bat</code><br>之后你就可以直接双击<code>.py</code>文件用IDLE打开，然后用F5，去运行并调试你写的程序了</li>
-</ol>
-<h3 id="IDLE提示缩进错误">IDLE提示缩进错误</h3><p>出现这个错误的原因可能是，Python自带的IDLE的tab的缩进和你的编辑器（比如sublime text 2）的tab 默认缩进大小不同，而且IDLE本身它对space和tab是区分的。所以经常会出现虽然你视觉上感觉不到缩进有错误，但是执行程序的时候，IDLE会报错。<br>解决方法是这样的，在IELD中，选择菜单栏的Edit-&gt;Select ALL，然后选择菜单栏的Format-&gt;Untabify Region。就可以了。<br>这个做法的作用是，把所有的tab替换成了space。</p>
-<h3 id="在idle里面打印网页中文是乱码">在idle里面打印网页中文是乱码</h3><p>windows系统下，用Python抓取网页时，在通过read()函数读取了网页之后，如果通过print打印出网页不经过编码转换，可能会出现网页中的中文字符以乱码的形式出现如下图所示。<br>这时的解决方法是，用gbk解码得到的网页。<br>把<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(html)</span><br></pre></td></tr></table></figure></p>
-<p>改成<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(html.decode(<span class="string">"gbk"</span>))</span><br></pre></td></tr></table></figure></p>
-<p>这个步骤的作用，是将以其它编码形式（一般是GBK）编码的中文解码成Unicode编码。</p>
-<h3 id="爬虫程序一段时间就假死">爬虫程序一段时间就假死</h3><h3 id="单线程太慢">单线程太慢</h3><h3 id="sublime_text_2编译任何语言控制台无输出">sublime text 2编译任何语言控制台无输出</h3>
+<li>选择你Python安装路径下的一个文件夹里面的<code>idle.bat</code>文件来打开。比如我的是在<code>C:\Python33\Lib\idlelib\idle.bat</code><br>之后你就可以直接双击<code>.py</code>文件用IDLE打开，然后用F5，去运行并调试你写的程序了
+            <div class="post-more-link text-center">
+              <a class="btn" href="/2015/01/27/20150127/#more">
+                阅读全文 &raquo;
+              </a>
+            </div>
           
         
       </div>
@@ -198,7 +207,7 @@
           
           
             
-              <a class="post-title-link" href="/2014/07/21/readlist之知乎名人/">
+              <a class="post-title-link" href="/2014/07/22/20140722/">
                 readlist之知乎名人
               </a>
             
@@ -209,7 +218,7 @@
       <div class="post-meta">
         <span class="post-time">
           
-            发表于 2014-07-20
+            发表于 2014-07-21
           
         </span>
 
@@ -232,8 +241,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2014/07/21/readlist之知乎名人/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2014/07/21/readlist之知乎名人/"></span>
+            <a href="/2014/07/22/20140722/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2014/07/22/20140722/"></span>
             </a>
           </span>
           
@@ -249,8 +258,12 @@
 
         
           
-            <p>在此分享我收藏的一些知乎上回答充满智慧的知乎用户，我有时间就会一一点开他们的主页，体会不同的思想和经历，感谢知乎让我能这么方便的了解认识这些活得漂亮的各种人。<br><strong>生活类</strong><br><a href="http://www.zhihu.com/people/xiepanda" target="_blank" rel="external">谢熊猫君</a>：夫妻海外工作，懂美食，生活有情调<br><a href="http://www.zhihu.com/people/snowyang" target="_blank" rel="external">羊小雪</a><br><a href="http://www.zhihu.com/people/bo-cai-28-7" target="_blank" rel="external">菠菜</a>：情感问题专家，看得很透<br><strong>NB程序员</strong><br><a href="http://www.zhihu.com/people/catchen" target="_blank" rel="external">catchen</a>：Facebook工作</p>
-
+            <p>在此分享我收藏的一些知乎上回答充满智慧的知乎用户，我有时间就会一一点开他们的主页，体会不同的思想和经历，感谢知乎让我能这么方便的了解认识这些活得漂亮的各种人。<br>
+            <div class="post-more-link text-center">
+              <a class="btn" href="/2014/07/22/20140722/#more">
+                阅读全文 &raquo;
+              </a>
+            </div>
           
         
       </div>
@@ -291,7 +304,7 @@
           
           
             
-              <a class="post-title-link" href="/2014/07/21/readlist之个人博客/">
+              <a class="post-title-link" href="/2014/07/21/20140721/">
                 readlist之个人博客
               </a>
             
@@ -325,8 +338,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2014/07/21/readlist之个人博客/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2014/07/21/readlist之个人博客/"></span>
+            <a href="/2014/07/21/20140721/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2014/07/21/20140721/"></span>
             </a>
           </span>
           
@@ -342,8 +355,12 @@
 
         
           
-            <p>在此分享一些我收藏的个人博客（大多是技术），他山之石，可以攻玉。<br><strong>综合类</strong><br><a href="http://www.ruanyifeng.com/home.html" target="_blank" rel="external">阮一峰的个人网站</a><br><a href="http://www.crifan.com/" target="_blank" rel="external">在路上</a><br><a href="http://www.yangzhiping.com/" target="_blank" rel="external">阳志平的网志</a><br><a href="http://www.qyjohn.net/" target="_blank" rel="external">婉兮清扬</a><br><a href="http://www.geekonomics10000.com/" target="_blank" rel="external">学而时嘻之</a><br><a href="https://www.byvoid.com/" target="_blank" rel="external">BYvoid</a><br><strong>偏技术</strong><br><a href="http://jibushengdan.tk/" target="_blank" rel="external">鸡不生蛋</a><br><a href="http://yanjunyi.com/" target="_blank" rel="external">严俊羿</a><br><a href="http://zipperary.com/" target="_blank" rel="external">zipperary</a><br><a href="http://miantiao.me/" target="_blank" rel="external">life memory</a><br><a href="http://zhangweide.cn/" target="_blank" rel="external">张卫</a><br><a href="http://yediot.me/" target="_blank" rel="external">伊底</a><br><a href="http://www.winterland.me/" target="_blank" rel="external">Winter’s Land</a><br><a href="http://wayou.github.io/" target="_blank" rel="external">Wayou Liu-前端开发</a><br><a href="http://imid.me/" target="_blank" rel="external">imid</a><br><a href="http://raytaylorlin.com/" target="_blank" rel="external">Ray Taylor Lin’s world</a><br><a href="http://shuaijiang.github.io/" target="_blank" rel="external">shuaijiang’s blog</a><br><a href="http://beiyuu.com/" target="_blank" rel="external">Beiyuu</a><br><a href="http://zihaolucky.github.io/" target="_blank" rel="external">zihao zheng</a><br><a href="http://www.lizherui.com/" target="_blank" rel="external">lizherui的程序世界</a></p>
-
+            <p>在此分享一些我收藏的个人博客（大多是技术），他山之石，可以攻玉。<br>
+            <div class="post-more-link text-center">
+              <a class="btn" href="/2014/07/21/20140721/#more">
+                阅读全文 &raquo;
+              </a>
+            </div>
           
         
       </div>
@@ -376,7 +393,7 @@
           
           
             
-              <a class="post-title-link" href="/2014/05/21/nodejs学习总结（二）nodejs的异步和回调嵌套的使用/">
+              <a class="post-title-link" href="/2014/05/21/20140521/">
                 nodejs的回调嵌套
               </a>
             
@@ -410,8 +427,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2014/05/21/nodejs学习总结（二）nodejs的异步和回调嵌套的使用/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/21/nodejs学习总结（二）nodejs的异步和回调嵌套的使用/"></span>
+            <a href="/2014/05/21/20140521/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/21/20140521/"></span>
             </a>
           </span>
           
@@ -429,7 +446,7 @@
           
             nodejs学习 nodejs入门 nodejs开发指南 nodejs回调嵌套 nodejs异步查询
             <div class="post-more-link text-center">
-              <a class="btn" href="/2014/05/21/nodejs学习总结（二）nodejs的异步和回调嵌套的使用/">
+              <a class="btn" href="/2014/05/21/20140521/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -473,7 +490,7 @@
           
           
             
-              <a class="post-title-link" href="/2014/05/18/node.js学习总结（一）nodejs入门/">
+              <a class="post-title-link" href="/2014/05/18/20140518/">
                 nodejs入门
               </a>
             
@@ -507,8 +524,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2014/05/18/node.js学习总结（一）nodejs入门/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/18/node.js学习总结（一）nodejs入门/"></span>
+            <a href="/2014/05/18/20140518/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/18/20140518/"></span>
             </a>
           </span>
           
@@ -526,7 +543,7 @@
           
             nodejs学习 nodejs入门 nodejs开发指南
             <div class="post-more-link text-center">
-              <a class="btn" href="/2014/05/18/node.js学习总结（一）nodejs入门/">
+              <a class="btn" href="/2014/05/18/20140518/">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -585,7 +602,7 @@
 
     <div class="site-overview">
       <div class="site-author motion-element">
-        <img class="site-author-image" src="/images/default_avatar.jpg" alt="professor-z" />
+        <img class="site-author-image" src="https://avatars3.githubusercontent.com/u/3747378?v=3&s=460" alt="professor-z" />
         <p class="site-author-name">professor-z</p>
       </div>
       <p class="site-description motion-element"></p>
@@ -616,6 +633,24 @@
       
 
       <div class="links-of-author motion-element">
+        
+          
+            <span class="links-of-author-item">
+              <a href="https://github.com/Professor-Z" target="_blank">GitHub</a>
+            </span>
+          
+            <span class="links-of-author-item">
+              <a href="http://weibo.com/1869392563/profile" target="_blank">微博</a>
+            </span>
+          
+            <span class="links-of-author-item">
+              <a href="http://www.douban.com/people/professorz/" target="_blank">豆瓣</a>
+            </span>
+          
+            <span class="links-of-author-item">
+              <a href="http://www.zhihu.com/people/z-s-h" target="_blank">知乎</a>
+            </span>
+          
         
       </div>
 
@@ -863,7 +898,7 @@
   
 
   <script type="text/javascript">
-    var duoshuoQuery = {short_name:"zhuluoji"};
+    var duoshuoQuery = {short_name:"proforz"};
     (function() {
       var ds = document.createElement('script');
       ds.type = 'text/javascript';ds.async = true;
