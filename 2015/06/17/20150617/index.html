@@ -20,7 +20,7 @@
 
 
 
-  <meta name="keywords" content="node.js 学习总结," />
+  <meta name="keywords" content="Hexo,next" />
 
 
 
@@ -46,7 +46,7 @@
 
 
 
-  <title> nodejs的回调嵌套 // PROForz </title>
+  <title> 考研总结 // PROForz </title>
 </head>
 
 <body>
@@ -126,7 +126,7 @@
           
           
             
-              nodejs的回调嵌套
+              考研总结
             
           
         </h1>
@@ -134,14 +134,14 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2014-05-21
+          发表于 2015-06-17
         </span>
 
         
           <span class="post-category">
             &nbsp; | &nbsp; 分类于
             
-              <a href="/categories/编程语言/">编程语言</a>
+              <a href="/categories/总结/">总结</a>
 
               
               
@@ -154,8 +154,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2014/05/21/20140521/#comments" >
-              <span class="post-comments-count ds-thread-count" data-thread-key="2014/05/21/20140521/"></span>
+            <a href="/2015/06/17/20150617/#comments" >
+              <span class="post-comments-count ds-thread-count" data-thread-key="2015/06/17/20150617/"></span>
             </a>
           </span>
           
@@ -169,34 +169,58 @@
       
 
       
-        <p>在学nodejs的过程中，我了解到的nodejs语法特性最突出的就是其单线程非阻塞特性。虽然在之前的入门手册中作者有讲这一方面，但是自己没实际用过还是不会。所以，在写我们的点菜系统的某一个“需要多次查询数据库然后统一返回结果”的函数的时候，一开始由于我对回调函数的使用不太熟悉，所以写出了并行查询的函数，结果出现每次查询还没返回数据就render网页的情况，也就导致网页上显示不出数据来。<br><a id="more"></a><br>当时我的代码的结构是这样子的：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">queryUser</span><span class="params">(req,res)</span></span>&#123;</span><br><span class="line">    <span class="comment">///一些初始化</span></span><br><span class="line">    connection.query(<span class="string">"SELECT * FROM database1"</span>,<span class="function"><span class="keyword">function</span><span class="params">(err,result)</span></span>&#123;</span><br><span class="line">    <span class="comment">///一些处理函数</span></span><br><span class="line">    row1=result;</span><br><span class="line">    &#125;);</span><br><span class="line">    connection.query(<span class="string">"SELECT * FROM database2"</span>,<span class="function"><span class="keyword">function</span><span class="params">(err,result)</span></span>&#123;</span><br><span class="line">    <span class="comment">///一些处理函数</span></span><br><span class="line">    row2=result;</span><br><span class="line">    &#125;);</span><br><span class="line">    res.render(<span class="string">'userProfile'</span>,&#123;data1:row1,data2:row2&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这是一个查询个人信息的模块中的一个主要的功能函数，它从两个数据库里面查询出数据来，作为参数传到同一个前端页面。当然这是我本来希望它实现的功能，但实际的结果是每次都是返回空白，插入一些console.log打印出来也是空白的查询结果。后来，经过询问其他人，我才清楚了，在这个函数的执行过程中，两个查询在发出查询请求之后，才不会等着执行结果返回再执行下面的代码，这是同步编程才会做的事。它是发出查询之后接着向下执行，等到查询结果返回，再去执行回调函数。所以，往往都是先render了之后，查询结果才返回，所以才会出现那样的结果。<br>所以，怎么解决这个问题呢，就是把回调函数嵌套，也就是把第二个查询写在第一个查询的回调函数里面，把render写在第二个查询的回调函数里面，这样虽然在代码上结构上看两个查询，render似乎不像平等的顺序执行的样子，或者说代码有点奇怪，但是实际上，它确实是顺序执行的。修改后的实际代码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">queryUser</span><span class="params">(conn,uId,res,callback)</span></span>&#123;</span><br><span class="line">    conn = conn || getConnection();</span><br><span class="line">    conn.query(<span class="string">"SELECT * FROM order_rice WHERE uname = ? "</span>, [uId], <span class="function"><span class="keyword">function</span><span class="params">(err, rows, fields)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">            <span class="keyword">throw</span> err;</span><br><span class="line">            o = &#123;code:<span class="number">1</span>, msg:<span class="string">"系统发生非预期错误，请联系管理员"</span>&#125;;</span><br><span class="line">            res.end(<span class="built_in">JSON</span>.stringify(o));</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (rows.length == <span class="number">0</span>) &#123;</span><br><span class="line">                row2 = <span class="literal">null</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                row2 = rows;</span><br><span class="line">            &#125;</span><br><span class="line">            querycallback(row2);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">querycallback</span><span class="params">(row2)</span></span>&#123;</span><br><span class="line">        conn = conn || getConnection();</span><br><span class="line">        conn.query(<span class="string">"SELECT * FROM users WHERE uname = ? "</span>, [uId], <span class="function"><span class="keyword">function</span><span class="params">(err, rows, fields)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (err) &#123;</span><br><span class="line">            <span class="keyword">throw</span> err;</span><br><span class="line">            o = &#123;code:<span class="number">1</span>, msg:<span class="string">"系统发生非预期错误，请联系管理员"</span>&#125;;</span><br><span class="line">            res.end(<span class="built_in">JSON</span>.stringify(o));</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (rows.length == <span class="number">0</span>) &#123;</span><br><span class="line">                row1 = <span class="literal">null</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                row1 = rows[<span class="number">0</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            callback(row1,row2);</span><br><span class="line">            conn.end();</span><br><span class="line">            conn = <span class="literal">null</span>;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>我实际上另外定义了一个回调函数，这样写避免了代码看起来太叠在一起。<br>这样再去执行，就可以完成查询了。</p>
-<p>这是我对nodejs回调嵌套和异步的简单理解，欢迎读者反馈。</p>
+        <p>看着“倒数日”APP上显示，考研完成已经172天了，再不总结一下就晚了。不是很喜欢写鸡汤，因为高中时被“等你在清华”系列恶心的不行。但是，并不是所有的经验都得写成鸡汤，也并不是所有的读者都单纯到蠢。所以，在太晚之前，还是写下一些总结，记录一下这段路，也算给后来者提供一个视角。</p>
+<p>说明一下我的考研情况，我本科专业是计科，考本校北邮网研院一组智能中心。最后成绩总分383，各科分别是数学118分，408专业课123分，英语80分，政治62分。<br><a id="more"></a><br>回顾准备考研的过程，可以说是中规中矩，马马虎虎。本科前两年对学习懈怠的心态——那么在乎名次有个毛用，老子高中辛苦保持年级前几名，高考还不是没考好——导致绩点始终不温不火。到了大三下学期，基本知道自己保研无望了，因为当初跟自己名次差不多的、想保研的那些人刷绩点太猛了——我比不过。到了大三暑假，别人问我要怎么打算，我就说考研，基本考本校了。其实当时我的目标是不明确的，我也想要不要在冲击一下清北，但是实在没有了高中时期的向往和神圣感，也没有了敢再丢掉一切的豪气。考北航，中科院？问了一些人说，没有必要，性价比低，有风险，不如留在我邮。于是，作为一个听话的人，我就基本想留在本校了。还有一个因素是本科一些绩点巨高的同学，也留在了本校，我感觉本校也不差嘛。</p>
+<p>基本解决了考哪里的问题，就开始跟着大伙的节奏准备，我很喜欢北邮人论坛，因为上面一直不知不觉给我一些人性上的关怀，很少有伤害。比如，在准备阶段，看了“考研专版”上一些研友发帖说自己进度慢，下面就有一大堆过来人，或是安慰，或是调侃，总之最后给我的理解是不要太死板，没有想象的那么难。所以，进度上，我也没有太严格的要求自己。大三的暑假，在学校装模作样地看了半个月书，就回到了我的山东老家，呆了一个月，拿回去的数学全书一个月几乎没怎么看。</p>
+<p>接下来，9月份，开学便开始正式的复习。由于时间过去比较久了，比较难以按时间轴回忆复习过程，就分学科说一下大致的复习过程。</p>
+<h3 id="数学">数学</h3><p>数学我其实没有什么资格讲经验，因为我觉得数学考试总是拖我的后腿。整个准备过程，我大致把数学全书看了一遍，其中线代用的李永乐的线代讲义，其实感觉不太好，硬撑着完了660题，时间已经很紧了，660题基本也没复习第二遍。然后开始做历年真题，基本做完了一遍，就上考场了。回顾数学的复习，觉得对我这种做数学题慢的人，660题花了那么长时间好像也没啥用处，不如多啃几遍历年真题来着。其他的也没啥好说，因为自己考得也不高。</p>
+<h3 id="英语">英语</h3><p>我在知乎上回答了“考研英语80分是什么体验”，这里直接贴过来吧。</p>
+<hr>
+<p>现在回想考研英语的备考，英语上用的时间算是各个学科里最少的吧。我主要是在分配给英语时间少的情况下，做了一些自己认为有些帮助的努力，而现在看来，其中的一部分是对考试有帮助的。</p>
+<p>简单来说主要有：</p>
+<ol>
+<li>大三下学期读了一本英文原版书（到底什么是真正的情商？ - 知乎用户的回答 这个回答里面介绍的书，只有英文版——Travis Bradberry很薄，要是厚可能我也读不下去）；</li>
+</ol>
+<ol>
+<li>大三暑假到九、十月份，背了几遍扇贝网上的单词量最小的考研词汇；</li>
+</ol>
+<ol>
+<li>考研时间最紧迫的时段（10~12月份）大约以平均每晚1篇阅读的速度（其实是大约每隔一天两篇阅读）做了张剑黄皮书试卷版的阅读题目，从05年做到了13年左右，每次做两篇阅读再对答案，用手机查单词，用一个小时左右，感觉是一种放松。</li>
+</ol>
+<ol>
+<li>大约11月份的时候，我感觉自己单词也没怎么背过，有点心虚，就从网上找了“16天背完7000英语单词”，打印出来，就用大半个月顺了一遍，给了自己一点心安。<br>最后到了12月份，那一段时间对英语是有一点慌的，因为反思到英语真的是花的时间最少，所以有时候就开始一晚上学两三个小时，那段时间主要是看从学校图书馆借的某考研机构出的作文范文。</li>
+</ol>
+<p>以上大致就是整个准备考研过程中，我在英语方面的所有付出。结合考试的过程，总结出一些关键的地方：</p>
+<ul>
+<li>每晚的阅读，我都是掐着时间做，而且，在做题的过程中，摸索出了比较适合自己的做题节奏，就是看一段材料答几个问题，而不是全看完了再做题再回去找。这样能够一定程度上缩短做题时间，而且也能减轻心理压力。个人觉得这个做题节奏很科学。</li>
+</ul>
+<ul>
+<li>阅读作文范文很重要。现在觉得最后12月抄范文和背范文的努力，对阅读和作文有很大的帮助。这个过程一是熟悉了作文的一般套路，作文都是有套路的。二是记住了很多比较高级的词汇，在自己写作文的时候，适时地用上可能会增色不少。三是，在读范文抄范文的过程中，实际上完成了训练语感的任务，所以最后一个月我没有完整做过一套模拟题，就一直在看范文，但是觉得语感没有变差。</li>
+</ul>
+<ul>
+<li>作文要多准备一些题材。15年英语一的小作文就是让推荐一本英语书，讲出它的内容，为什么推荐等等。而我上文提到的看的那本英文书，写作文的时候恰巧可以用上。所以英语作文事先可以多准备一些素材，书籍、电影、运动、等等。到时候会帮一些忙。<br>以上是一些个人经验，仅供参考。<br>最后祝备考的朋友们开心备考，得偿所愿。</li>
+</ul>
+<hr>
+<h3 id="专业课（代号408）">专业课（代号408）</h3><p>专业课最后的成绩是有一点运气在的，我自估的水平在100分左右。整个复习过程里，我看了王道单科的书两遍，第一遍很慢，而且习题有的都没做完，比如信号量那一块，不知道为什么要出那么多题目。第二遍看的很快，因为不用做题目了，所以第二遍看的挺有感觉的。然后就是看王道历年真题解析，我并没有直接做真题，主要是看了看大题很难，做的话也是打击自己，就直接看知识点。最后是做王道8套卷，王道8套卷吧，不少题目跟单科书课后题很像，甚至有的直接就是，所以如果做过的话，做起来并不太难，但是还是值得做。最后讲一讲考试吧，我考试的时候，大题跳着做的，先挑的有把握的，到最后还是有好几个大题几乎是蒙的，选择题也有大量的拿不准，要么是我太菜，要么出题人太作。不过最后成绩竟然不错，只能说这考试很逗。</p>
+<h3 id="政治">政治</h3><p>政治放在最后说，是因为，这个没有什么个人经验，随大流就行。我个人觉得考前背背是很重要的，然后选择题的准确度要提高上去。我是觉得考60多分挺满足的，所以也没从一开始看大纲，风中劲草也没怎么看，就考前一个月背、做选择，最后选择做的不好，得了62分。</p>
+<p>Last but not least，考研期间保持好的心情很重要，我觉得跟小伙伴一起复习能让自己心情更轻松一些，能知道大家都复习的咋样，互相吐槽、安慰。一起吃个饭，一起去办这办那，也是挺爽的。</p>
+<p>要感谢很多人，家人，一起复习的室友、小伙伴，感谢学校图书馆，感谢北邮人论坛。最后希望大家得偿所愿，而且开心。</p>
 
       
     </div>
 
     <div class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/node-js-学习总结/"> #node.js 学习总结 </a>
-          
-        </div>
-      
 
       
         <div class="post-nav">
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2014/07/21/20140721/">readlist之个人博客</a>
-            
           </div>
 
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2014/05/18/20140518/">nodejs入门</a>
+              <a href="/2015/01/27/20150127/">python抓取数据技巧和问题总结</a>
             
           </div>
         </div>
@@ -212,8 +236,8 @@
     
       <div class="comments" id="comments">
         
-          <div class="ds-thread" data-thread-key="2014/05/21/20140521/"
-               data-title="nodejs的回调嵌套" data-url="http://proforz.com/2014/05/21/20140521/">
+          <div class="ds-thread" data-thread-key="2015/06/17/20150617/"
+               data-title="考研总结" data-url="http://proforz.com/2015/06/17/20150617/">
           </div>
         
       </div>
@@ -316,7 +340,7 @@
           <div class="post-toc">
             
             
-              <p class="post-toc-empty">此文章未包含目录</p>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#数学"><span class="nav-number">1.</span> <span class="nav-text">数学</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#英语"><span class="nav-number">2.</span> <span class="nav-text">英语</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#专业课（代号408）"><span class="nav-number">3.</span> <span class="nav-text">专业课（代号408）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#政治"><span class="nav-number">4.</span> <span class="nav-text">政治</span></a></li></ol></div>
             
           </div>
           <div class="post-toc-indicator-bottom post-toc-indicator"></div>
