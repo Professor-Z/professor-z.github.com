@@ -3,16 +3,16 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: PROForz
+title: vuuihc
 subtitle: "Talk is cheap, show me the code"
-description: 
-author: professor-z
+description:
+author: vuuihc
 language: zh-Hans
 timezone:
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://proforz.com
+url: http://vuuihc.com
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -92,8 +92,8 @@ baidu_analytics: e1772f6cae00bbcff36e1b832a32d8cb
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
 - type: git
-  repo: git@gitcafe.com:professor-z/professor-z.git
-  branch: gitcafe-pages
+  repo: git@git.coding.net:vuuihc/vuuihc.git
+  branch: coding-pages
 - type: git
   repo: git@github.com:Professor-Z/professor-z.github.com.git
   branch: master
