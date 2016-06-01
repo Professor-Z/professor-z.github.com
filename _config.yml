@@ -3,10 +3,10 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: PROForz
+title: vuuihc
 subtitle: "Talk is cheap, show me the code"
-description: 
-author: professor-z
+description:
+author: vuuihc
 language: zh-Hans
 timezone:
 
@@ -76,7 +76,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
-theme: next
+theme: yilia
 duoshuo_shortname: proforz
 #头像
 avatar: https://avatars3.githubusercontent.com/u/3747378?v=3&s=460
@@ -91,9 +91,9 @@ baidu_analytics: e1772f6cae00bbcff36e1b832a32d8cb
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
-# - type: git
-#   repo: git@gitcafe.com:professor-z/professor-z.git
-#   branch: gitcafe-pages
+- type: git
+  repo: git@git.coding.net:vuuihc/vuuihc.git
+  branch: coding-pages
 - type: git
   repo: git@github.com:Professor-Z/professor-z.github.com.git
   branch: master
