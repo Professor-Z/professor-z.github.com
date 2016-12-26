@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Our Love Story</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<style type="text/css">
+		@font-face {
+			font-family: digit;
+			src: url('digital-7_mono.ttf') format("truetype");
+		}
+	</style>
+	<link href="css/default.css" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/garden.js"></script>
+    <script type="text/javascript" src="js/functions.js"></script>
+</head>
+
+<body>
+	<div id="mainDiv">
+		<div id="content">
+			<div id="code">
+				<p><span class="comments">/**</span><br>
+				  <span class="space"><span class="comments">* 亲爱的虾米，在情人节前的夜晚</span><br>
+				  <span class="space"><span class="comments">* 我写下这个，来回忆我们爱恋</span><br>
+				  <br>
+				  <span class="space"><span class="comments">* 高三，我们进到同一个班里，认识了彼此</span><br>
+				  <span class="space"><span class="comments">* 大学，我们来到同一个城市，渐渐地熟悉</span><br>
+				  <br>
+				  <span class="space"><span class="comments">* 甜美的微笑</span><br>
+				  <span class="space"><span class="comments">* 开心的交谈</span><br>
+				  <span class="space"><span class="comments">* 温暖的动作</span><br>
+				  <br>
+				  <span class="space"><span class="comments">* 在我心中，久久萦绕</span><br>
+				  <br>
+				  <span class="space"><span class="comments">* 而我，也察觉到，你心中有我们的情谊</span><br>
+				  <span class="space"><span class="comments">* 终于有一天，你托梦告诉我，要向前走一步</span><br>
+				  <span class="comments">**/</span><br>
+				Boy<span class="keyword"> i =</span> Boy(<span class="string">"呆(shuai)哥(ge)"</span>);<br>
+				Girl<span class="keyword"> u =</span> Girl(<span class="string">"女(lian)神(mei)"</span>);<br>
+				<span class="comments">//那一天，我告诉你我喜欢你 </span><br>
+				i.love(u);<br>
+				<span class="comments">//然后，你接受了我的表白</span><br>
+				u.accepted();<br>
+				<span class="comments">//从那以后, 我每天都会想你</span><br>
+				i.miss(u);<br>
+				<span class="comments">//我会努力照顾好你</span><br>
+				i.takeCareOf(u);<br>
+				<span class="comments">//愿我们共同创造快乐与美好</span><br>
+				i.liveHappilyWith(u);<br>
+                <span class="comments">//一切</span><br>
+		 	  Forever.link(i.hand,u.hand)<br>
+              <span class="comments">//在不言中</span><br><br>
+              <span class="space"><span class="comments">/** 我的宝贝，情人节快乐！**/</span><br><br>
+
+		      </span></span></span></span></span></span></span></span></span></span></span></p>
+			</div>
+			<div id="loveHeart">
+				<canvas id="garden"></canvas>
+				<div id="words">
+					<div id="messages">
+						I have fallen in love with you for
+					  <div id="elapseClock"></div>
+					</div>
+					<div id="loveu">
+					DEAR 虾米，I love you.
+						<div class="signature">-你的哥哥</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="copyright">
+			Inspired by <a href="http://www.openrise.com/lab/FlowerPower/">FlowerPower</a> project.<br />
+			Copyright © 2011 <a href='http://hackerzhou.me'>hackerzhou.me</a> 2009-2011
+		</div>
+	</div>
+	<script type="text/javascript">
+		var offsetX = $("#loveHeart").width() / 2;
+		var offsetY = $("#loveHeart").height() / 2 - 55;
+		var together = new Date();
+		together.setFullYear(2010, 10, 2);
+		together.setHours(20);
+		together.setMinutes(0);
+		together.setSeconds(0);
+		together.setMilliseconds(0);
+		
+		if (!document.createElement('canvas').getContext) {
+			var msg = document.createElement("div");
+			msg.id = "errorMsg";
+			msg.innerHTML = "Your browser doesn't support HTML5!<br/>Recommend use Chrome 14+/IE 9+/Firefox 7+/Safari 4+"; 
+			document.body.appendChild(msg);
+			$("#code").css("display", "none")
+			$("#copyright").css("position", "absolute");
+			$("#copyright").css("bottom", "10px");
+		    document.execCommand("stop");
+		} else {
+			setTimeout(function () {
+				startHeartAnimation();
+			}, 5000);
+
+			timeElapse(together);
+			setInterval(function () {
+				timeElapse(together);
+			}, 500);
+
+			adjustCodePosition();
+			$("#code").typewriter();
+		}
+	</script>
+</body>
+</html>

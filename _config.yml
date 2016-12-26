@@ -1,0 +1,99 @@
+# Hexo Configuration
+## Docs: http://hexo.io/docs/configuration.html
+## Source: https://github.com/hexojs/hexo/
+
+# Site
+title: vuuihc
+subtitle: "Talk is cheap, show me the code"
+description:
+author: vuuihc
+language: zh-Hans
+timezone:
+
+# URL
+## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
+url: http://vuuihc.com
+root: /
+permalink: :year/:month/:day/:title/
+permalink_defaults:
+
+# Directory
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+code_dir: downloads/code
+i18n_dir: :lang
+skip_render:
+
+# Writing
+new_post_name: :title.md # File name of new posts
+default_layout: post
+titlecase: false # Transform title into titlecase
+external_link: true # Open external links in new tab
+filename_case: 0
+render_drafts: false
+post_asset_folder: false
+relative_link: false
+future: true
+highlight:
+  enable: true
+  line_number: true
+  tab_replace:
+
+# Category & Tag
+default_category: uncategorized
+category_map:
+tag_map:
+# Archives 默认值为2，这里都修改为1，相应页面就只会列出标题，而非全文
+## 2: Enable pagination
+## 1: Disable pagination
+## 0: Fully Disable
+archive: 1
+category: 1
+tag: 1
+# Date / Time format
+## Hexo uses Moment.js to parse and display date
+## You can customize the date format as defined in
+## http://momentjs.com/docs/#/displaying/format/
+date_format: YYYY-MM-DD
+time_format: HH:mm:ss
+
+# Server 不修改
+## Hexo uses Connect as a server
+## You can customize the logger format as defined in
+## http://www.senchalabs.org/connect/logger.html
+port: 4000
+logger: false
+logger_format:
+
+# Pagination
+## Set per_page to 0 to disable pagination
+per_page: 5
+pagination_dir: page
+
+# Extensions
+## Plugins: http://hexo.io/plugins/
+## Themes: http://hexo.io/themes/
+theme: yilia
+duoshuo_shortname: proforz
+#头像
+avatar: https://avatars3.githubusercontent.com/u/3747378?v=3&s=460
+social:
+  GitHub: https://github.com/Professor-Z
+  微博: http://weibo.com/1869392563/profile
+  豆瓣: http://www.douban.com/people/professorz/
+  知乎: http://www.zhihu.com/people/z-s-h
+
+baidu_analytics: e1772f6cae00bbcff36e1b832a32d8cb
+
+# Deployment
+## Docs: http://hexo.io/docs/deployment.html
+deploy:
+- type: git
+  repo: git@git.coding.net:vuuihc/vuuihc.git
+  branch: coding-pages
+- type: git
+  repo: git@github.com:Professor-Z/professor-z.github.com.git
+  branch: master
