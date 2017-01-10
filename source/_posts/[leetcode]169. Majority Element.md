@@ -1,6 +1,6 @@
 ---
 layout: post
-title: [leetcode]169. Majority Element
+title: "[leetcode]169. Majority Element"
 date: 2015-09-26
 tags: leetcode
 ---
