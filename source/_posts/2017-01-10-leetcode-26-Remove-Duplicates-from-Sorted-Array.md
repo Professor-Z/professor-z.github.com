@@ -22,7 +22,7 @@ var removeDuplicates = function(nums) {
         if(left>=right){
             return;
         }else{
-            let base = nums[left],low=left+1,high=right,curIndex=left;
+            let base = nums[left],low=left,high=right,curIndex=left;//!!之前low=left+1是错误的，会导致已排序数组仍然进行排序
             while(low<high){
                 while(low<high && nums[high]>=base){
                     high--;
