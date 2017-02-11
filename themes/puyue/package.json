@@ -1,0 +1,9 @@
+{
+  "name": "puyue",
+  "version": "0.0.0",
+  "description": "puyue hexo theme",
+  "private": true,
+  "dependencies": {
+    "hexo-renderer-jade": "^0.3.0"
+  }
+}
