@@ -95,5 +95,5 @@ deploy:
   repo: git@git.coding.net:vuuihc/vuuihc.git
   branch: coding-pages
 - type: git
-  repo: git@github.com:Professor-Z/professor-z.github.com.git
+  repo: git@github.com:vuuihc/vuuihc.github.com.git
   branch: master
