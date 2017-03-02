@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"><meta name="format-detection" content="telephone=no"><meta name="format-detection" content="email=no"><meta name="description"><meta name="keywords" content="Hexo, Gruntjs, Nodejs, Reactjs, Vuejs"><title>5分钟制作最简单WiFi分享程序 - vuuihc</title><link rel="stylesheet" href="/css/main_style.min.css"><link rel="icon" href="/favicon.ico"></head><body><div class="post-header"><img class="background" src="/default_images/post_background.jpg"><div class="post-title"><h1 class="title">5分钟制作最简单WiFi分享程序</h1><ul class="meta"><li><i class="icon icon-author"></i>vuuihc</li><li><i class="icon icon-clock"></i>0 Minutes</li><li><i class="icon icon-calendar"></i>April 23, 2013</li></ul></div></div><div class="article-content"><p><strong>目标</strong>：将你的电脑的网络分享出来让有WiFi功能的设备连接。</p>
+<p><strong>适用环境</strong>：能连接无线网的电脑。</p>
+<p>下面开始教程，只有两步哦~看好了：<br><a id="more"></a></p>
+<ol>
+<li>在桌面新建一个记事本文件（鼠标右键-&gt;新建-&gt;文本文档），然后先不要改名字，打开它，在里面输入三行：<blockquote>
+<p>netsh wlan set hostednetwork mode=allow ssid=你无线网的名字（只能是字母和数字，只能以字母开头） key=你无线网的密码（字母和数字）</p>
+</blockquote>
+</li>
+</ol>
+<blockquote>
+<p>netsh wlan start hostednetwork   </p>
+<p>pause</p>
+</blockquote>
+<ol>
+<li><p>然后保存关闭。</p>
+</li>
+<li><p>选中刚才那个文件，按F2，或者右击重命名，重命名为“WiFi.bat”。名字不重要，要bat结尾。系统会提示更改名字会导致文件不可用，不用管，点是即可。<br>经过这两步，以后每次只需要双击bat文件，然后看到成功的提示，就能让你的设备连接无线网啦~</p>
+</li>
+</ol>
+</div><div class="article-meta"><div class="tags"><i class="icon icon-tag"></i><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/小技巧/">小技巧</a><span class="tag-list-count">1</span></li></ul></div><div class="categories"><i class="icon icon-category"></i><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/问题解决/">问题解决</a><span class="category-list-count">2</span></li></ul></div></div><div class="article-comment"><div class="ds-thread" id="ds-thread" data-thread-key="cizsigve6001d4n6nwh3akbws" data-title="5分钟制作最简单WiFi分享程序" data-url="http://vuuihc.com/2013/04/23/5分钟制作最简单的WiFi分享程序/" site-name="vuuihc"></div><script>var siteName = document.getElementById('ds-thread').getAttribute('site-name');
+var duoshuoQuery = {short_name: siteName};
+(function() {
+  var ds = document.createElement('script');
+  ds.type = 'text/javascript';ds.async = true;
+  ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+  ds.charset = 'UTF-8';
+  (document.getElementsByTagName('head')[0] 
+  || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();</script></div><ul class="navication"><li class="home"><a href="/"><i class="icon icon-home"></i></a></li><li><a href="/2013/04/24/m进制转十进制/"><i class="icon icon-arror-left"></i></a></li><li><a href="/2013/04/20/回文平方数/"><i class="icon icon-arror-right"></i></a></li></ul><div class="page-footer"><div class="top"><ul class="social"><li><a href="http://github.com/Professor-Z" title="GitHub" target="_blank"><i class="icon icon-github"></i></a></li><li><a href="http://weibo.com/vuuihc" title="Weibo" target="_blank"><i class="icon icon-weibo"></i></a></li></ul></div><div class="bottom"><p class="copyright">© 2017 vuuihc<br><small>POWER BY <a href="https://hexo.io" target="_blank">HEXO</a></small><small>, THEME BY <a href="https://github.com/BoizZ/hexo-theme-laughing" target="_blank">LAUGHING</a></small></p></div></div></body></html>
