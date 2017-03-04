@@ -81,8 +81,8 @@ duoshuo_shortname: proforz
 #头像
 avatar: https://avatars3.githubusercontent.com/u/3747378?v=3&s=460
 social:
-  GitHub: https://github.com/Professor-Z
-  微博: http://weibo.com/1869392563/profile
+  GitHub: https://github.com/vuuihc
+  微博: http://weibo.com/vuuihc
   豆瓣: http://www.douban.com/people/professorz/
   知乎: http://www.zhihu.com/people/z-s-h
 
@@ -95,5 +95,5 @@ deploy:
   repo: git@git.coding.net:vuuihc/vuuihc.git
   branch: coding-pages
 - type: git
-  repo: git@github.com:vuuihc/vuuihc.github.com.git
+  repo: git@github.com:vuuihc/vblog.git
   branch: master
