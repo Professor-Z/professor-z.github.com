@@ -76,7 +76,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
-theme: laughing
+theme: next
 duoshuo_shortname: proforz
 #头像
 avatar: https://avatars3.githubusercontent.com/u/3747378?v=3&s=460
