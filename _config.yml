@@ -94,6 +94,6 @@ deploy:
 - type: git
   repo: git@git.coding.net:vuuihc/vuuihc.git
   branch: coding-pages
-- type: git
-  repo: git@github.com:vuuihc/vblog.git
-  branch: master
+# - type: git
+#   repo: git@github.com:vuuihc/vblog.git
+#   branch: master
