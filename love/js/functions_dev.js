@@ -77,7 +77,7 @@ function startHeartAnimation() {
 			$ele.html('');
 			var timer = setInterval(function() {
 				var current = str.substr(progress, 1);
-				if (current == '<') {="" progress="str.indexOf('">', progress) + 1;
+				if (current == '<') { progress="str.indexOf('">', progress) + 1;
 				} else {
 					progress++;
 				}

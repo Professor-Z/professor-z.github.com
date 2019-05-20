@@ -1,10 +1,357 @@
-<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"><meta name="format-detection" content="telephone=no"><meta name="format-detection" content="email=no"><meta name="description"><meta name="keywords" content="Hexo, Gruntjs, Nodejs, Reactjs, Vuejs"><title>[译] JavaScript 启动性能探究 - vuuihc</title><link rel="stylesheet" href="/css/main_style.min.css"><link rel="icon" href="/favicon.ico"></head><body><div class="post-header"><img class="background" src="/default_images/post_background.jpg"><div class="post-title"><h1 class="title">[译] JavaScript 启动性能探究</h1><ul class="meta"><li><i class="icon icon-author"></i>vuuihc</li><li><i class="icon icon-clock"></i>19 Minutes</li><li><i class="icon icon-calendar"></i>February 16, 2017</li></ul></div></div><div class="article-content"><blockquote>
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="翻译," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="原文地址：JavaScript Start-up Performance 原文作者：Addy Osmani 译文出自：掘金翻译计划 译者：Professor-Z 校对者：fghpdf, skyar2009   本文由 Google Chrome 团队成员 Addy Osmani 所写。主要探究 JavaScript 的解析编译过程对 Web 应用的启动性能的影响。文章主要分为三个部分，第一部分">
+<meta name="keywords" content="翻译">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[译] JavaScript 启动性能探究">
+<meta property="og:url" content="http://vuuihc.com/2017/02/16/译-JavaScript-启动性能探究/index.html">
+<meta property="og:site_name" content="vuuihc">
+<meta property="og:description" content="原文地址：JavaScript Start-up Performance 原文作者：Addy Osmani 译文出自：掘金翻译计划 译者：Professor-Z 校对者：fghpdf, skyar2009   本文由 Google Chrome 团队成员 Addy Osmani 所写。主要探究 JavaScript 的解析编译过程对 Web 应用的启动性能的影响。文章主要分为三个部分，第一部分">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/1*GuWInZljjvtDpdeT6O0emA.png">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/0*M94-AavlZjGoudZG.">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/1*XjHkzz0B7KlcDbLFD1JS8Q.png">
+<meta property="og:image" content="http://p1.bqimg.com/1949/1b2fcab3d77309c1.png">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/600/1*nkJwMuE5PpgF_pE0e6RM6g.jpeg">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/800/1*dnhO1M_zlmAhvtQY_7tZmA.jpeg">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/1*WC4zanI0DKAoSiJVU3VUeA.png">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/800/1*NacL9cZJ1osZowPS6hbCsQ.jpeg">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/1*uTRfB5pne06h8lp5jGtiIQ.jpeg">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/800/1*GvwfE2GjKQyLBKPmmfRwuA.png">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/0*rWkYJzc6Cp0r3Xkr.">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/800/0*P-_pLIITtYJRikRN.">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/600/1*y6x_vr7aOxK4jHG9blgseg.png">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/800/1*tV48evC-XzYkoHonyKGkOw.png">
+<meta property="og:image" content="http://p1.bqimg.com/1949/268de751304f859f.png">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/800/1*ziA8f9KhB1gOt-Mq07cRFw.jpeg">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/800/1*FFzrH2QUiQZFX2rlF5e2-g.jpeg">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/800/1*sr4eb-cx3lq7hVrJGfDNaw.png">
+<meta property="og:image" content="http://p1.bqimg.com/1949/1cebbf646ca580f5.png">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/800/1*cE8uvuvb0-iZslygh2NCTQ.jpeg">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/600/1*xChjWSbT1rCqgLMacOMotQ.png">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/1000/1*ooXJ0NES-gXEzteaGPL2nQ.png">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/800/1*FAvUG7DrVJUXCK3oweMSLQ.png">
+<meta property="og:image" content="https://cdn-images-1.medium.com/max/600/1*LMRg_jHJeP53vdy8aiTEJQ.png">
+<meta property="og:updated_time" content="2019-05-12T11:55:03.747Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[译] JavaScript 启动性能探究">
+<meta name="twitter:description" content="原文地址：JavaScript Start-up Performance 原文作者：Addy Osmani 译文出自：掘金翻译计划 译者：Professor-Z 校对者：fghpdf, skyar2009   本文由 Google Chrome 团队成员 Addy Osmani 所写。主要探究 JavaScript 的解析编译过程对 Web 应用的启动性能的影响。文章主要分为三个部分，第一部分">
+<meta name="twitter:image" content="https://cdn-images-1.medium.com/max/1000/1*GuWInZljjvtDpdeT6O0emA.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://vuuihc.com/2017/02/16/译-JavaScript-启动性能探究/"/>
+
+
+
+
+
+  <title>[译] JavaScript 启动性能探究 | vuuihc</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6cb71e63a793b221e47991b4b89ce937";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vuuihc</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Talk is cheap, show me the code</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://vuuihc.com/2017/02/16/译-JavaScript-启动性能探究/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vuuihc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/3747378?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vuuihc">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">[译] JavaScript 启动性能探究</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-16T22:37:28+08:00">
+                2017-02-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/16/译-JavaScript-启动性能探究/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/16/译-JavaScript-启动性能探究/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
 <ul>
-<li>原文地址：<a href="https://medium.com/@addyosmani/javascript-start-up-performance-69200f43b201#.f2ifedbt2" target="_blank" rel="external">JavaScript Start-up Performance</a></li>
-<li>原文作者：<a href="https://medium.com/@addyosmani?source=post_header_lockup" target="_blank" rel="external">Addy Osmani</a></li>
-<li>译文出自：<a href="https://github.com/xitu/gold-miner" target="_blank" rel="external">掘金翻译计划</a></li>
-<li>译者：<a href="https://github.com/Professor-Z" target="_blank" rel="external">Professor-Z</a></li>
-<li>校对者：<a href="https://github.com/fghpdf" target="_blank" rel="external">fghpdf</a>, <a href="https://github.com/skyar2009" target="_blank" rel="external">skyar2009</a></li>
+<li>原文地址：<a href="https://medium.com/@addyosmani/javascript-start-up-performance-69200f43b201#.f2ifedbt2" target="_blank" rel="noopener">JavaScript Start-up Performance</a></li>
+<li>原文作者：<a href="https://medium.com/@addyosmani?source=post_header_lockup" target="_blank" rel="noopener">Addy Osmani</a></li>
+<li>译文出自：<a href="https://github.com/xitu/gold-miner" target="_blank" rel="noopener">掘金翻译计划</a></li>
+<li>译者：<a href="https://github.com/Professor-Z" target="_blank" rel="noopener">Professor-Z</a></li>
+<li>校对者：<a href="https://github.com/fghpdf" target="_blank" rel="noopener">fghpdf</a>, <a href="https://github.com/skyar2009" target="_blank" rel="noopener">skyar2009</a></li>
 </ul>
 </blockquote>
 <p>本文由 Google Chrome 团队成员 Addy Osmani 所写。主要探究 JavaScript 的解析编译过程对 Web 应用的启动性能的影响。文章主要分为三个部分，第一部分描述问题背景，讲述了业界开放环境中 JavaScript 的解析编译过程的成本情况；第二部分给出了几种测量解析编译成本的方法；第三部分从开发者和 Chrome 团队两个角度讲了如何降低解析编译成本从而提高 Web 应用启动速度。</p>
@@ -23,10 +370,10 @@
 <p>在你可能正在使用的 <strong>大量</strong> 大型网站和框架中，解析和编译也被视为一个性能瓶颈。以下是来自 Facebook 的 Sebastian Markbage 和 Google 的 Rob Wormald 的推文：</p>
 <p><img src="http://p1.bqimg.com/1949/1b2fcab3d77309c1.png" alt="Markdown"></p>
 <p><img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/600/1*nkJwMuE5PpgF_pE0e6RM6g.jpeg"></p>
-<p>Sam Saccone 在 <a href="https://www.youtube.com/watch?v=RWLzUnESylc" target="_blank" rel="external">Planning for Performance</a> 中提到了 JS 解析的成本。</p>
+<p>Sam Saccone 在 <a href="https://www.youtube.com/watch?v=RWLzUnESylc" target="_blank" rel="noopener">Planning for Performance</a> 中提到了 JS 解析的成本。</p>
 <p>随着我们进入一个逐渐移动化的世界，我们有必要知道 <strong>解析、编译在手机上花费的时间通常是在桌面上的 2 - 5 倍</strong>。高端手机（例如 iPhone 或 Pixel）的表现与 Moto G4 非常不同。这更说明了测试代表性硬件（不仅仅是高端硬件！）的重要性，只有这样，用户体验才不会受到影响。</p>
 <p><img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/1*dnhO1M_zlmAhvtQY_7tZmA.jpeg"></p>
-<p>1 MB 的 JavaScript 文件在不同类别的桌面设备和移动设备上的 <a href="https://docs.google.com/a/google.com/spreadsheets/d/1Zk0HDGvqNO_8jaudF2jwTItI-H0blD8_ShHfLsnp_Us/edit?usp=sharing" target="_blank" rel="external">解析时间</a>。可以注意到，像 iPhone 7 这样的高端手机的性能和 Macbook Pro 是多么接近，而沿着图表向下看，普通的移动硬件性能则不一样了。</p>
+<p>1 MB 的 JavaScript 文件在不同类别的桌面设备和移动设备上的 <a href="https://docs.google.com/a/google.com/spreadsheets/d/1Zk0HDGvqNO_8jaudF2jwTItI-H0blD8_ShHfLsnp_Us/edit?usp=sharing" target="_blank" rel="noopener">解析时间</a>。可以注意到，像 iPhone 7 这样的高端手机的性能和 Macbook Pro 是多么接近，而沿着图表向下看，普通的移动硬件性能则不一样了。</p>
 <p>如果应用程序需要传输的文件很大，那么被广泛采用的现代打包技术，如 code-splitting、tree-shaking 和 Service Worker caching 可以产生巨大作用。但是，<strong>即使文件很小，如果代码写得不好或者用了很差的第三方库，也会导致主线程在编译或函数调用时被长时间阻塞。</strong> 整体衡量和理解真正的瓶颈在哪里是很重要的。</p>
 <h3 id="JavaScript-解析、编译是普通网站的瓶颈吗？"><a href="#JavaScript-解析、编译是普通网站的瓶颈吗？" class="headerlink" title="JavaScript 解析、编译是普通网站的瓶颈吗？"></a>JavaScript 解析、编译是普通网站的瓶颈吗？</h3><p>『（你说的都对……）但是，我的网站又不是Facebook』，你可能会这样说。 <strong>『外面的一般网站的解析和编译时间所占比例有多大？』</strong>，你可能会这样问。现在我们来研究一下！</p>
 <p>我花了两个月时间测试了一系列（6000+）使用了不同库和框架（如 React、Angular、Ember 和 Vue）构建的大型生产站点的性能。其中大多数测试最近可以在 WebPageTest 重做。所以如果你愿意的话，很容易重做这些测试，或者深入研究这些数据。下面是一些分析结果：</p>
@@ -43,16 +390,16 @@
 <p>Timeline (Performance panel) &gt; Bottom-Up/Call Tree/Event Log 可以帮助我们深入了解解析、编译花费的时间。为了得到更完整的分析（比如在解析、编译或惰性编译中花费的时间），我们可以打开 <strong>V8 的 Runtime Call Stats</strong> 。 在 Canary 中，你可以在 Timeline 中的 Experiments &gt; V8 Runtime Call Stats 找到它。</p>
 <p><img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/1000/0*rWkYJzc6Cp0r3Xkr."></p>
 <p><strong>Chrome Tracing</strong></p>
-<p>在 Chrome 地址栏输入 <strong>about:tracing</strong> 之后，这个 Chrome 的底层跟踪工具允许我们使用 <code>disabled-by-default-v8.runtime_stats</code> 类别来深入了解 V8 的时间消耗详情。V8 几天前发布了一个 <a href="https://docs.google.com/presentation/d/1Lq2DD28CGa7bxawVH_2OcmyiTiBn74dvC6vn2essroY/edit#slide=id.g1a504e63c9_2_84" target="_blank" rel="external">循序渐进的指导文档</a> 可以帮助你了解它的用法。</p>
+<p>在 Chrome 地址栏输入 <strong>about:tracing</strong> 之后，这个 Chrome 的底层跟踪工具允许我们使用 <code>disabled-by-default-v8.runtime_stats</code> 类别来深入了解 V8 的时间消耗详情。V8 几天前发布了一个 <a href="https://docs.google.com/presentation/d/1Lq2DD28CGa7bxawVH_2OcmyiTiBn74dvC6vn2essroY/edit#slide=id.g1a504e63c9_2_84" target="_blank" rel="noopener">循序渐进的指导文档</a> 可以帮助你了解它的用法。</p>
 <p><img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/0*P-_pLIITtYJRikRN."></p>
 <p><strong>WebPageTest</strong></p>
 <p><img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/600/1*y6x_vr7aOxK4jHG9blgseg.png"></p>
 <p>当我们使用 Chrome 的 Capture Dev Tools Timeline 进行跟踪分析时，WebPageTest 的 『Processing Breakdown』 页面包含了对 V8 编译、EvaluateScript 和 FunctionCall 的时间的深入分析。</p>
 <p>现在我们还可以通过指定 <code>disabled-by-default-v8.runtime_stats</code> 为自定义跟踪类别来获得 <strong>Runtime Call Stats</strong>（WPT 的 Pat Meenan 现在默认这样做！）。</p>
 <p><img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/1*tV48evC-XzYkoHonyKGkOw.png"></p>
-<p>如果你想知道如何充分利用这一工具，可以参阅我写的 <a href="https://gist.github.com/addyosmani/45b135900a7e3296e22673148ae5165b" target="_blank" rel="external">这篇文档</a> 。</p>
+<p>如果你想知道如何充分利用这一工具，可以参阅我写的 <a href="https://gist.github.com/addyosmani/45b135900a7e3296e22673148ae5165b" target="_blank" rel="noopener">这篇文档</a> 。</p>
 <p><strong>User Timing</strong></p>
-<p>也可以像 Nolan Lawson 下面指出的这样，通过 <a href="https://w3c.github.io/user-timing/#dom-performance-mark" target="_blank" rel="external">User Timing API</a> 测量解析时间：</p>
+<p>也可以像 Nolan Lawson 下面指出的这样，通过 <a href="https://w3c.github.io/user-timing/#dom-performance-mark" target="_blank" rel="noopener">User Timing API</a> 测量解析时间：</p>
 <p><img src="http://p1.bqimg.com/1949/268de751304f859f.png" alt="Markdown"></p>
 <p>第 3 个脚本不重要，第 1 个脚本与第 2 个脚本分开（ <em>performance.mark()</em> 在要测试的 script 标签之前执行）是重要的。</p>
 <p><strong>使用此方法时，V8 的 preparser 可能会影响后续重新加载。这可以通过在脚本的结尾处附加一个随机字符串来解决，Nolan 在他的 optimize-js benchmarks 中就是这样做的。</strong></p>
@@ -60,21 +407,21 @@
 <p><img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/1*ziA8f9KhB1gOt-Mq07cRFw.jpeg"></p>
 <p>自定义的 Google Analytics 维度 『parse』 可让我测量开放环境中访问我的网页的真实用户和设备的 JavaScript 解析时间。</p>
 <p><strong>DeviceTiming</strong></p>
-<p>Etsy的 <a href="https://github.com/danielmendel/DeviceTiming" target="_blank" rel="external">DeviceTiming</a> 工具可以帮助测量受控环境中脚本的解析和执行时间。它的工作原理是用测试代码封装本地脚本，以便每次页面被不同的设备（例如笔记本电脑、手机、平板电脑）访问时，我们可以本地比较解析、执行时间。Daniel Espeset的文章 <a href="http://talks.desp.in/unpacking-the-black-box" target="_blank" rel="external">Benchmarking JS Parsing and Execution on Mobile Devices</a> 详细介绍了这个工具。</p>
+<p>Etsy的 <a href="https://github.com/danielmendel/DeviceTiming" target="_blank" rel="noopener">DeviceTiming</a> 工具可以帮助测量受控环境中脚本的解析和执行时间。它的工作原理是用测试代码封装本地脚本，以便每次页面被不同的设备（例如笔记本电脑、手机、平板电脑）访问时，我们可以本地比较解析、执行时间。Daniel Espeset的文章 <a href="http://talks.desp.in/unpacking-the-black-box" target="_blank" rel="noopener">Benchmarking JS Parsing and Execution on Mobile Devices</a> 详细介绍了这个工具。</p>
 <p><img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/1*FFzrH2QUiQZFX2rlF5e2-g.jpeg"></p>
 <h3 id="当前可以做什么来减少-JavaScript-解析时间"><a href="#当前可以做什么来减少-JavaScript-解析时间" class="headerlink" title="当前可以做什么来减少 JavaScript 解析时间?"></a><strong>当前可以做什么来减少 JavaScript 解析时间?</strong></h3><ul>
 <li><p><strong>传输更少的 JavaScript。</strong> 需要解析的脚本越少，我们在解析和编译阶段用的时间就越少。</p>
 </li>
-<li><p><strong>使用 code-splitting 技术，只发送用户当前路由需要的代码，延迟加载其余代码。</strong> 想要避免解析太多的 JS，这可能是最有帮助的方法。类似 <a href="https://developers.google.com/web/fundamentals/performance/prpl-pattern/" target="_blank" rel="external">PRPL</a> 的模式鼓励这种基于路由的文件分块，现在已经被 Flipkart、Housing.com 和 Twitter 采用。</p>
+<li><p><strong>使用 code-splitting 技术，只发送用户当前路由需要的代码，延迟加载其余代码。</strong> 想要避免解析太多的 JS，这可能是最有帮助的方法。类似 <a href="https://developers.google.com/web/fundamentals/performance/prpl-pattern/" target="_blank" rel="noopener">PRPL</a> 的模式鼓励这种基于路由的文件分块，现在已经被 Flipkart、Housing.com 和 Twitter 采用。</p>
 </li>
-<li><p><strong>Script streaming:</strong> 过去，V8 已经告诉开发者通过 <code>async/defer</code> 选择使用 <a href="https://blog.chromium.org/2015/03/new-javascript-techniques -for-rapid.html" target="_blank" rel="external">Script streaming</a> 模式，可以使得解析时间减少 10 - 20％。这允许 HTML 解析器能够至少先检测到资源，将（解析）工作分配给 script streaming 线程，从而不阻塞文档解析。现在，解析器阻塞脚本也有了个模式，不需要做什么额外操作。V8 建议 <strong>先加载较大的打包文件，因只有一个脚本流线程</strong>（之后会说到这点）</p>
+<li><p><strong>Script streaming:</strong> 过去，V8 已经告诉开发者通过 <code>async/defer</code> 选择使用 <a href="https://blog.chromium.org/2015/03/new-javascript-techniques -for-rapid.html" target="_blank" rel="noopener">Script streaming</a> 模式，可以使得解析时间减少 10 - 20％。这允许 HTML 解析器能够至少先检测到资源，将（解析）工作分配给 script streaming 线程，从而不阻塞文档解析。现在，解析器阻塞脚本也有了个模式，不需要做什么额外操作。V8 建议 <strong>先加载较大的打包文件，因只有一个脚本流线程</strong>（之后会说到这点）</p>
 </li>
-<li><p><strong>测量依赖的解析成本</strong> ，比如各种库和框架。在可能的情况下，将它们切换为拥有更快解析速度的依赖（例如，把 React 切换为 Preact 或 Inferno，后两者启动时需要更少的字节码，更少的解析、编译时间）。Paul Lewis 在最近的一篇文章中介绍了 <a href="https://aerotwist.com/blog/when-everything-is-important-nothing-is/" target="_blank" rel="external">framework bootup</a> 成本。Sebastian Markbage 也在推文中 <a href="https://twitter.com/sebmarkbage/status/829733454119989248" target="_blank" rel="external">提到</a>，<strong>一个测量框架的启动成本的好方法是首先渲染一遍视图，然后删除它，然后再次渲染，这可以告诉你它的启动成本</strong>。因为第一次渲染会（解析、编译）唤起一堆懒编译的代码，之后重复渲染一个更大的代码树时可以不用重复进行。</p>
+<li><p><strong>测量依赖的解析成本</strong> ，比如各种库和框架。在可能的情况下，将它们切换为拥有更快解析速度的依赖（例如，把 React 切换为 Preact 或 Inferno，后两者启动时需要更少的字节码，更少的解析、编译时间）。Paul Lewis 在最近的一篇文章中介绍了 <a href="https://aerotwist.com/blog/when-everything-is-important-nothing-is/" target="_blank" rel="noopener">framework bootup</a> 成本。Sebastian Markbage 也在推文中 <a href="https://twitter.com/sebmarkbage/status/829733454119989248" target="_blank" rel="noopener">提到</a>，<strong>一个测量框架的启动成本的好方法是首先渲染一遍视图，然后删除它，然后再次渲染，这可以告诉你它的启动成本</strong>。因为第一次渲染会（解析、编译）唤起一堆懒编译的代码，之后重复渲染一个更大的代码树时可以不用重复进行。</p>
 </li>
 </ul>
 <p>如果我们选择的 JavaScript 框架支持提前编译模式（AoT），也有助于大大减少在解析、编译中花费的时间。Angular 应用就受益于这种模式，看这个例子：</p>
 <p><img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/1*sr4eb-cx3lq7hVrJGfDNaw.png"></p>
-<p>Nolan Lawson 的 <a href="https://channel9.msdn.com/Blogs/msedgedev/nolanlaw-web-perf-crisis" target="_blank" rel="external">『解决 Web 性能危机』</a></p>
+<p>Nolan Lawson 的 <a href="https://channel9.msdn.com/Blogs/msedgedev/nolanlaw-web-perf-crisis" target="_blank" rel="noopener">『解决 Web 性能危机』</a></p>
 <h3 id="当前-浏览器-为了减少解析和编译时间在做什么"><a href="#当前-浏览器-为了减少解析和编译时间在做什么" class="headerlink" title="当前 浏览器 为了减少解析和编译时间在做什么?"></a><strong>当前 <em>浏览器</em> 为了减少解析和编译时间在做什么?</strong></h3><p>并不是只有开发者才认为生产环境的应用启动时间是一个需要改进的领域。V8 发现 Octane 作为有历史的测试平台之一，对我们通常测试的 25 个热门网站的真实性能的测试效果不佳。Octane 对于 1）<strong>JavaScript 框架</strong>（通常代码不是单/多态性）和 2）<strong>实际页面应用程序启动</strong>（大多数是冷启动代码）来说不是一个好的工具。这两个用例对于web 来说非常重要。也就是说，Octane 不是对所有种类的工作负载都是不合理的。</p>
 <p>V8 团队一直努力改善启动时间，并且已经在这些地方取得了一些胜利：</p>
 <p><img src="http://p1.bqimg.com/1949/1cebbf646ca580f5.png" alt="Markdown"></p>
@@ -83,8 +430,8 @@
 <p>我们也看到了 Pinterest 网站在这方面的有所进展。在过去几年中，V8 开展了许多其他探索，以减少解析和编译时间。</p>
 <p><strong>Code caching</strong></p>
 <p><img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/600/1*xChjWSbT1rCqgLMacOMotQ.png"></p>
-<p>来自文章 <a href="https://www.nativescript.org/blog/using-v8-code-caching-to-minimize-app-load-time-on-android" target="_blank" rel="external">使用 V8 的代码缓存</a></p>
-<p>Chrome 42 引入了<a href="http://v8project.blogspot.com/2015/07/code-caching.html" target="_blank" rel="external">Code caching</a>  —— 它通过在本地存储编译后的代码，使得在用户返回页面时，脚本请求、解析和编译过程都可以跳过。我们注意到，这项变更可让 Chrome 在处理页面后续访问时减少约 40％ 的编译时间，但现在我想对这项功能进一步说明：</p>
+<p>来自文章 <a href="https://www.nativescript.org/blog/using-v8-code-caching-to-minimize-app-load-time-on-android" target="_blank" rel="noopener">使用 V8 的代码缓存</a></p>
+<p>Chrome 42 引入了<a href="http://v8project.blogspot.com/2015/07/code-caching.html" target="_blank" rel="noopener">Code caching</a>  —— 它通过在本地存储编译后的代码，使得在用户返回页面时，脚本请求、解析和编译过程都可以跳过。我们注意到，这项变更可让 Chrome 在处理页面后续访问时减少约 40％ 的编译时间，但现在我想对这项功能进一步说明：</p>
 <ul>
 <li><p><strong>在 72 小时内执行两次</strong> 的脚本才会触发 Code caching。</p>
 </li>
@@ -96,10 +443,10 @@
 <p>所以，结论是， <strong>如果我们的代码是在缓存中，V8 会在第 3 次加载时跳过解析和编译。</strong><br>我们可以在 <em>chrome://flags/#v8-cache-strategies-for-cache-storage</em> 中查看这些差异。 我们还可以设置 <code>js-flags=profile-deserialization</code> 后运行Chrome，看看项目是否从代码缓存中加载（在日志中显示为反序列化事件）。</p>
 <p>使用 Code caching 需要注意的一个点是，它只缓存可预编译的代码。通常只是运行一次以设置全局变量的顶层代码。 函数定义通常是惰性编译的，不总是被缓存。 <strong>IIFEs</strong>（optimize-js 用户）也被在 V8 Code caching 缓存，因为它们也可预编译。</p>
 <p><strong>Script Streaming</strong></p>
-<p><a href="https://blog.chromium.org/2015/03/new-javascript-techniques-for-rapid.html" target="_blank" rel="external">Script streaming</a> 允许脚本开始下载后在 <strong>单独的后台线程</strong> 上解析异步或延迟脚本，从而将页面加载速度提高了多达 10％。如前所述，这同样适用于 <strong>同步</strong> 脚本。</p>
+<p><a href="https://blog.chromium.org/2015/03/new-javascript-techniques-for-rapid.html" target="_blank" rel="noopener">Script streaming</a> 允许脚本开始下载后在 <strong>单独的后台线程</strong> 上解析异步或延迟脚本，从而将页面加载速度提高了多达 10％。如前所述，这同样适用于 <strong>同步</strong> 脚本。</p>
 <p><img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/1000/1*ooXJ0NES-gXEzteaGPL2nQ.png"></p>
 <p>自从该功能首次引入以来，V8 已经切换到允许 <strong>所有脚本</strong>、<strong>甚至</strong> 是 <code>src=&quot;&quot;</code> 的解析器阻塞脚本在后台线程上解析，所以所有人都应该在这里看到一些成果。唯一需要注意的是，这里只有一个后台线程，所以把大的、关键的脚本先分配给它很重要。<strong>在这里思考任何潜在的优化都很重要。</strong></p>
-<p><strong>经验之谈是，把 defer 脚本放在 <head> 里，这样 V8 就可以早发现资源，然后在用台线程解析它。</head></strong></p>
+<p><strong>经验之谈是，把 defer 脚本放在 <head><meta name="generator" content="Hexo 3.8.0"> 里，这样 V8 就可以早发现资源，然后在用台线程解析它。</head></strong></p>
 <p>可以使用 DevTools Timeline 检查是否选择了正确的脚本被流式传输 —— 如果有一个大脚本占用了解析时间，那么（通常）确保它被流式传输接收是有意义的。</p>
 <p><img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/800/1*FAvUG7DrVJUXCK3oweMSLQ.png"></p>
 <p><strong>更好地解析和编译</strong></p>
@@ -107,47 +454,467 @@
 <p>(function (global, <strong>module</strong>) { … })(this, function <strong>module</strong>() { <em>my functions</em> })</p>
 <p>V8 不会知道 <strong>modules</strong> 是否一定是需要的，所以当主脚本编译时不会编译它。当我们决定编译 <strong>modules</strong> 时，我们需要重新解析所有的内部函数。这就是 V8 的解析时间非线性的原因。深度为 n 的每个函数都被解析 n 次，并导致闪避。</p>
 <p>V8 已经在致力于在初始编译期间收集内部函数的信息，从而任何未来的编译都可以 <strong>忽略</strong> 它们的内部函数。对于 <strong>module</strong> 风格函数，这应该会导致很大的性能改进。</p>
-<p>参阅 ‘<a href="https://docs.google.com/presentation/d/1214p4CFjsF-NY4z9in0GEcJtjbyVQgU0A-UqEvovzCs/edit#slide=id.p" target="_blank" rel="external">The V8 Parser(s) — Design, Challenges, and Parsing JavaScript Better</a>’ 以获得更多信息.</p>
+<p>参阅 ‘<a href="https://docs.google.com/presentation/d/1214p4CFjsF-NY4z9in0GEcJtjbyVQgU0A-UqEvovzCs/edit#slide=id.p" target="_blank" rel="noopener">The V8 Parser(s) — Design, Challenges, and Parsing JavaScript Better</a>’ 以获得更多信息.</p>
 <p>V8 也在探索在启动期间将 JavaScript 编译的部分分配到 <strong>后台线程</strong>。</p>
 <p><strong>预编译 JavaScript?</strong></p>
 <p>每隔几年，就会有提供一种方法 <strong>预编译</strong> 脚本的引擎出现，以帮助我们不浪费时间解析或编译代码。它们的想法是，如果不预解析、编译代码，一个构建时或服务器端工具就能直接生成字节码，我们会看到启动速度的巨大提高。我认为，传输字节码将会增加加载时间（文件会更大），可能需要对代码进行签名并做一些安全处理。V8 的立场是，现在探索避免内部重新解析将有助于看到很大的进步，这是预编译可能不能提供的，但同时我们会对可以获得更快的启动时间的想法持开放讨论的态度。也就是说，当开发者在 Service Worker 中更新站点时，V8 正在探索更积极地编译和缓存脚本代码，我们希望这些工作获得一些成果。</p>
-<p>我们与 Facebook 和 Akamai 在 BlinkOn 7 讨论了预编译，我的笔记可以在 <a href="https://gist.github.com/addyosmani/4009ee1238c4b1ff6f2a2d8a5057c181" target="_blank" rel="external">这里</a> 找到。</p>
+<p>我们与 Facebook 和 Akamai 在 BlinkOn 7 讨论了预编译，我的笔记可以在 <a href="https://gist.github.com/addyosmani/4009ee1238c4b1ff6f2a2d8a5057c181" target="_blank" rel="noopener">这里</a> 找到。</p>
 <p><strong>Optimize JS 惰性解析的括号「hack」</strong></p>
 <p>像 V8 这样的 JavaScript 引擎有一个惰性解析启发式方法，在进行一轮完整的解析之前，它们会预先解析我们脚本中的大多数函数（例如检查语法错误）。这是因为大多数页面都有懒惰执行的 JS 函数。</p>
 <p><img class="progressiveMedia-noscript js-progressiveMedia-inner" src="https://cdn-images-1.medium.com/max/600/1*LMRg_jHJeP53vdy8aiTEJQ.png"></p>
-<p>预解析可以通过仅检查浏览器需要了解的函数的最小集合来加快启动时间。这与 IIFE 有所分歧，虽然引擎尝试跳过对它们的预解析，但是启发式并不总是可靠的，这就是 <a href="https://github.com/nolanlawson/optimize-js" target="_blank" rel="external">optimize-js</a> 等工具发挥作用的地方。</p>
+<p>预解析可以通过仅检查浏览器需要了解的函数的最小集合来加快启动时间。这与 IIFE 有所分歧，虽然引擎尝试跳过对它们的预解析，但是启发式并不总是可靠的，这就是 <a href="https://github.com/nolanlawson/optimize-js" target="_blank" rel="noopener">optimize-js</a> 等工具发挥作用的地方。</p>
 <p>optimize-js 提前解析脚本，在它知道（或通过启发式假设）的函数将立即执行的地方插入括号来使其获得 <strong>更快的执行</strong>。对一些函数插入括号是稳妥的（比如带有 ! 的 IIFE）。其它的就是基于启发式的（例如在 Browserify 或 Webpack 包中，假定所有模块都急切加载，就不一定适用这种情况）。总而言之，V8 希望这样的 hack 不再被需要，但现在我们可以认为这是一个优化，如果我们知道你在做什么。</p>
 <p><strong>V8 也在努力降低编译器判断错误的情况下的成本，这也应该减少对括号的需要</strong></p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><strong>启动性能很重要</strong> 较长的解析、编译和执行时间组合起来会变成希望快速启动的页面的真正瓶颈。你应该 <strong>测量</strong> 你的网页在此阶段花费的时间，探索你可以做什么以使其更快。</p>
 <p>我们将尽我们所能从我们的角度继续努力提高 V8 启动性能。 这是我们的承诺;）也希望你们有一个快乐的提高性能的过程！</p>
 <h3 id="阅读更多"><a href="#阅读更多" class="headerlink" title="阅读更多"></a><strong>阅读更多</strong></h3><ul>
-<li><p><a href="https://www.youtube.com/watch?v=RWLzUnESylc" target="_blank" rel="external">Planning for Performance</a></p>
+<li><p><a href="https://www.youtube.com/watch?v=RWLzUnESylc" target="_blank" rel="noopener">Planning for Performance</a></p>
 </li>
-<li><p><a href="https://twitter.com/MSEdgeDev/status/819985530775404544" target="_blank" rel="external">Solving the Web Performance Crisis by Nolan Lawson</a> </p>
+<li><p><a href="https://twitter.com/MSEdgeDev/status/819985530775404544" target="_blank" rel="noopener">Solving the Web Performance Crisis by Nolan Lawson</a> </p>
 </li>
-<li><p><a href="https://timkadlec.com/2014/09/js-parse-and-execution-time/" target="_blank" rel="external">JS Parse and Execution Time</a> </p>
+<li><p><a href="https://timkadlec.com/2014/09/js-parse-and-execution-time/" target="_blank" rel="noopener">JS Parse and Execution Time</a> </p>
 </li>
-<li><p><a href="http://carlos.bueno.org/2010/02/measuring-javascript-parse-and-load.html" target="_blank" rel="external">Measuring Javascript Parse and Load</a></p>
+<li><p><a href="http://carlos.bueno.org/2010/02/measuring-javascript-parse-and-load.html" target="_blank" rel="noopener">Measuring Javascript Parse and Load</a></p>
 </li>
-<li><p><a href="https://www.safaribooksonline.com/library/view/velocity-conference-new/9781491900406/part78.html" target="_blank" rel="external">Unpacking the Black Box: Benchmarking JS Parsing and Execution on Mobile Devices</a></p>
+<li><p><a href="https://www.safaribooksonline.com/library/view/velocity-conference-new/9781491900406/part78.html" target="_blank" rel="noopener">Unpacking the Black Box: Benchmarking JS Parsing and Execution on Mobile Devices</a></p>
 </li>
-<li><p>(<a href="https://speakerdeck.com/desp/unpacking-the-black-box-benchmarking-js-parsing-and-execution-on-mobile-devices" target="_blank" rel="external">slides</a></p>
+<li><p>(<a href="https://speakerdeck.com/desp/unpacking-the-black-box-benchmarking-js-parsing-and-execution-on-mobile-devices" target="_blank" rel="noopener">slides</a></p>
 </li>
-<li><p><a href="https://aerotwist.com/blog/when-everything-is-important-nothing-is/" target="_blank" rel="external">When everything’s important, nothing is!</a> </p>
+<li><p><a href="https://aerotwist.com/blog/when-everything-is-important-nothing-is/" target="_blank" rel="noopener">When everything’s important, nothing is!</a> </p>
 </li>
-<li><p><a href="http://benediktmeurer.de/2016/12/16/the-truth-about-traditional-javascript-benchmarks/" target="_blank" rel="external">The truth about traditional JavaScript benchmarks</a></p>
+<li><p><a href="http://benediktmeurer.de/2016/12/16/the-truth-about-traditional-javascript-benchmarks/" target="_blank" rel="noopener">The truth about traditional JavaScript benchmarks</a></p>
 </li>
-<li><p><a href="http://stackoverflow.com/questions/1096907/do-browsers-parse-javascript-on-every-page-load/" target="_blank" rel="external">Do Browsers Parse JavaScript On Every Page Load</a></p>
+<li><p><a href="http://stackoverflow.com/questions/1096907/do-browsers-parse-javascript-on-every-page-load/" target="_blank" rel="noopener">Do Browsers Parse JavaScript On Every Page Load</a></p>
 </li>
 </ul>
 <p><strong>向 V8 (Toon Verwaest, Camillo Bruni, Benedikt Meurer, Marja Hölttä, Seth Thompson), Nolan Lawson (MS Edge), Malte Ubl (AMP), Tim Kadlec (Synk), Gray Norton (Chrome DX), Paul Lewis, Matt Gaunt and Rob Wormald (Angular) 致谢，同时感谢他们对本文的修订</strong></p>
-</div><div class="article-meta"><div class="tags"><i class="icon icon-tag"></i><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/翻译/">翻译</a><span class="tag-list-count">1</span></li></ul></div></div><div class="article-comment"><div class="ds-thread" id="ds-thread" data-thread-key="cjvv4jx8u0048t2eivyxlsh24" data-title="[译] JavaScript 启动性能探究" data-url="http://vuuihc.com/2017/02/16/译-JavaScript-启动性能探究/" site-name="vuuihc"></div><script>var siteName = document.getElementById('ds-thread').getAttribute('site-name');
-var duoshuoQuery = {short_name: siteName};
-(function() {
-  var ds = document.createElement('script');
-  ds.type = 'text/javascript';ds.async = true;
-  ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-  ds.charset = 'UTF-8';
-  (document.getElementsByTagName('head')[0] 
-  || document.getElementsByTagName('body')[0]).appendChild(ds);
-})();</script></div><ul class="navication"><li class="home"><a href="/"><i class="icon icon-home"></i></a></li><li><a href="/2017/03/02/这项浏览器调整使-Facebook-收到的网络请求减少了-60/"><i class="icon icon-arror-left"></i></a></li><li><a href="/2017/02/11/Netflix-使用-React-构建高性能的电视用户界面/"><i class="icon icon-arror-right"></i></a></li></ul><div class="page-footer"><div class="top"><ul class="social"><li><a href="http://github.com/Professor-Z" title="GitHub" target="_blank"><i class="icon icon-github"></i></a></li><li><a href="http://weibo.com/vuuihc" title="Weibo" target="_blank"><i class="icon icon-weibo"></i></a></li></ul></div><div class="bottom"><p class="copyright">© 2019 vuuihc<br><small>POWER BY <a href="https://hexo.io" target="_blank">HEXO</a></small><small>, THEME BY <a href="https://github.com/BoizZ/hexo-theme-laughing" target="_blank">LAUGHING</a></small></p></div></div></body></html>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/翻译/" rel="tag"># 翻译</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/11/Netflix-使用-React-构建高性能的电视用户界面/" rel="next" title="[译]Netflix: 使用 React 构建高性能的电视用户界面">
+                <i class="fa fa-chevron-left"></i> [译]Netflix: 使用 React 构建高性能的电视用户界面
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/02/这项浏览器调整使-Facebook-收到的网络请求减少了-60/" rel="prev" title="[译] 这项浏览器调整使 Facebook 收到的网络请求减少了 60%">
+                [译] 这项浏览器调整使 Facebook 收到的网络请求减少了 60% <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2017/02/16/译-JavaScript-启动性能探究/"
+           data-title="[译] JavaScript 启动性能探究" data-url="http://vuuihc.com/2017/02/16/译-JavaScript-启动性能探究/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars3.githubusercontent.com/u/3747378?v=3&s=460"
+                alt="vuuihc" />
+            
+              <p class="site-author-name" itemprop="name">vuuihc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/vuuihc" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/vuuihc" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.douban.com/people/professorz/" target="_blank" title="豆瓣">
+                      
+                        <i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.zhihu.com/people/z-s-h" target="_blank" title="知乎">
+                      
+                        <i class="fa fa-fw fa-globe"></i>知乎</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#启动时拖慢应用的是什么"><span class="nav-number">1.</span> <span class="nav-text">启动时拖慢应用的是什么?</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript-解析、编译是普通网站的瓶颈吗？"><span class="nav-number"></span> <span class="nav-text">JavaScript 解析、编译是普通网站的瓶颈吗？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#当前如何测量-JavaScript-的解析和编译"><span class="nav-number"></span> <span class="nav-text">当前如何测量 JavaScript 的解析和编译</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#当前可以做什么来减少-JavaScript-解析时间"><span class="nav-number"></span> <span class="nav-text">当前可以做什么来减少 JavaScript 解析时间?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#当前-浏览器-为了减少解析和编译时间在做什么"><span class="nav-number"></span> <span class="nav-text">当前 浏览器 为了减少解析和编译时间在做什么?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number"></span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#阅读更多"><span class="nav-number"></span> <span class="nav-text">阅读更多</span></a></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vuuihc</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"proforz"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

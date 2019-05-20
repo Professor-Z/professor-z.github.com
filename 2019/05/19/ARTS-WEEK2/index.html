@@ -1,4 +1,326 @@
-<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"><meta name="format-detection" content="telephone=no"><meta name="format-detection" content="email=no"><meta name="description"><meta name="keywords" content="Hexo, Gruntjs, Nodejs, Reactjs, Vuejs"><title>vuuihc ARTS WEEK2 - vuuihc</title><link rel="stylesheet" href="/css/main_style.min.css"><link rel="icon" href="/favicon.ico"></head><body><div class="post-header"><img class="background" src="/default_images/post_background.jpg"><div class="post-title"><h1 class="title">vuuihc ARTS WEEK2</h1><ul class="meta"><li><i class="icon icon-author"></i>vuuihc</li><li><i class="icon icon-clock"></i>8 Minutes</li><li><i class="icon icon-calendar"></i>May 19, 2019</li></ul></div></div><div class="article-content"><p>每周至少:<br>1.做一个 leetcode 的算法题<br>2.阅读并点评至少一篇英文技术文章<br>3.学习至少一个技术技巧<br>4.分享一篇有观点和思考的技术文章<br><a id="more"></a></p>
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ARTS,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="每周至少:1.做一个 leetcode 的算法题2.阅读并点评至少一篇英文技术文章3.学习至少一个技术技巧4.分享一篇有观点和思考的技术文章">
+<meta name="keywords" content="ARTS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="vuuihc ARTS WEEK2">
+<meta property="og:url" content="http://vuuihc.com/2019/05/19/ARTS-WEEK2/index.html">
+<meta property="og:site_name" content="vuuihc">
+<meta property="og:description" content="每周至少:1.做一个 leetcode 的算法题2.阅读并点评至少一篇英文技术文章3.学习至少一个技术技巧4.分享一篇有观点和思考的技术文章">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-19T15:57:22.534Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="vuuihc ARTS WEEK2">
+<meta name="twitter:description" content="每周至少:1.做一个 leetcode 的算法题2.阅读并点评至少一篇英文技术文章3.学习至少一个技术技巧4.分享一篇有观点和思考的技术文章">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://vuuihc.com/2019/05/19/ARTS-WEEK2/">
+
+
+
+
+
+  <title>vuuihc ARTS WEEK2 | vuuihc</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6cb71e63a793b221e47991b4b89ce937";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vuuihc</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Talk is cheap, show me the code</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://vuuihc.com/2019/05/19/ARTS-WEEK2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vuuihc">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/3747378?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vuuihc">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">vuuihc ARTS WEEK2</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-19T20:00:00+08:00">
+                2019-05-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/05/19/ARTS-WEEK2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/05/19/ARTS-WEEK2/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>每周至少:<br>1.做一个 leetcode 的算法题<br>2.阅读并点评至少一篇英文技术文章<br>3.学习至少一个技术技巧<br>4.分享一篇有观点和思考的技术文章<br><a id="more"></a></p>
 <h2 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h2><ol>
 <li>Insert Interval</li>
 </ol>
@@ -6,28 +328,441 @@
 <p>You may assume that the intervals were initially sorted according to their start times.</p>
 <p>Example 1:</p>
 <p>Input: intervals = [[1,3],[6,9]], newInterval = [2,5]<br>Output: [[1,5],[6,9]]<br>Example 2:</p>
-<p>Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]<br>Output: [[1,2],[3,10],[12,16]]<br>Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].<br>NOTE: input types have been changed on April 15, 2019. Please reset to default code definition to get new method signature.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">insert</span><span class="params">(self, intervals, newInterval)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        :type intervals: List[List[int]]</div><div class="line">        :type newInterval: List[int]</div><div class="line">        :rtype: List[List[int]]</div><div class="line">        """</div><div class="line">        newList = [newInterval]</div><div class="line">        <span class="keyword">for</span> inv <span class="keyword">in</span> intervals:</div><div class="line">            lastIntv = newList[<span class="number">-1</span>]</div><div class="line">            <span class="keyword">if</span> self.need_merge(lastIntv, inv):</div><div class="line">                lastIntv = self.merge(lastIntv, inv)</div><div class="line">                newList[<span class="number">-1</span>] = lastIntv</div><div class="line">                <span class="keyword">continue</span></div><div class="line">            <span class="keyword">elif</span> lastIntv[<span class="number">0</span>] &gt; inv[<span class="number">1</span>]:</div><div class="line">                newList.insert(len(newList)<span class="number">-1</span>, inv)</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                newList.append(inv)</div><div class="line">        <span class="keyword">return</span> newList</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">need_merge</span><span class="params">(self, intv1, intv2)</span>:</span></div><div class="line">        <span class="keyword">if</span> intv1[<span class="number">0</span>] &gt; intv2[<span class="number">1</span>] <span class="keyword">or</span> intv1[<span class="number">1</span>] &lt; intv2[<span class="number">0</span>]:</div><div class="line">            <span class="keyword">return</span> <span class="keyword">False</span></div><div class="line">        <span class="keyword">return</span> <span class="keyword">True</span></div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">merge</span><span class="params">(self, intv1, intv2)</span>:</span></div><div class="line">        <span class="keyword">return</span> [min(intv1[<span class="number">0</span>], intv2[<span class="number">0</span>]), max(intv1[<span class="number">1</span>], intv2[<span class="number">1</span>])]</div></pre></td></tr></table></figure></p>
-<h2 id="Review"><a href="#Review" class="headerlink" title="Review"></a>Review</h2><p>Has the Python GIL been slain?<br><a href="https://hackernoon.com/has-the-python-gil-been-slain-9440d28fa93d" target="_blank" rel="external">https://hackernoon.com/has-the-python-gil-been-slain-9440d28fa93d</a></p>
+<p>Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]<br>Output: [[1,2],[3,10],[12,16]]<br>Explanation: Because the new interval [4,8] overlaps with [3,5],[6,7],[8,10].<br>NOTE: input types have been changed on April 15, 2019. Please reset to default code definition to get new method signature.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">insert</span><span class="params">(self, intervals, newInterval)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type intervals: List[List[int]]</span></span><br><span class="line"><span class="string">        :type newInterval: List[int]</span></span><br><span class="line"><span class="string">        :rtype: List[List[int]]</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        newList = [newInterval]</span><br><span class="line">        <span class="keyword">for</span> inv <span class="keyword">in</span> intervals:</span><br><span class="line">            lastIntv = newList[<span class="number">-1</span>]</span><br><span class="line">            <span class="keyword">if</span> self.need_merge(lastIntv, inv):</span><br><span class="line">                lastIntv = self.merge(lastIntv, inv)</span><br><span class="line">                newList[<span class="number">-1</span>] = lastIntv</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            <span class="keyword">elif</span> lastIntv[<span class="number">0</span>] &gt; inv[<span class="number">1</span>]:</span><br><span class="line">                newList.insert(len(newList)<span class="number">-1</span>, inv)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                newList.append(inv)</span><br><span class="line">        <span class="keyword">return</span> newList</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">need_merge</span><span class="params">(self, intv1, intv2)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> intv1[<span class="number">0</span>] &gt; intv2[<span class="number">1</span>] <span class="keyword">or</span> intv1[<span class="number">1</span>] &lt; intv2[<span class="number">0</span>]:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">merge</span><span class="params">(self, intv1, intv2)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> [min(intv1[<span class="number">0</span>], intv2[<span class="number">0</span>]), max(intv1[<span class="number">1</span>], intv2[<span class="number">1</span>])]</span><br></pre></td></tr></table></figure></p>
+<h2 id="Review"><a href="#Review" class="headerlink" title="Review"></a>Review</h2><p>Has the Python GIL been slain?<br><a href="https://hackernoon.com/has-the-python-gil-been-slain-9440d28fa93d" target="_blank" rel="noopener">https://hackernoon.com/has-the-python-gil-been-slain-9440d28fa93d</a></p>
 <ol>
 <li><p>GIL 是一个锁，被cpython（解释器）使用，导致Python代码实际上是单线程的（虽然可以用threading，可以用async 方法，能提高代码运行效率）</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">The GIL, or Global Interpreter Lock, is a boolean value in the Python interpreter, protected by a mutex. The lock is used by the core bytecode evaluation loop in CPython to set which thread is currently executing statements.</div><div class="line"></div><div class="line">CPython supports multiple threads within a single interpreter, but threads must request access to the GIL in order to execute Opcodes (low-level operations). This, in turn, means that Python developers can utilize async code, multi-threaded code and never have to worry about acquiring locks on any variables or having processes crash from deadlocks.</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">The GIL, or Global Interpreter Lock, is a boolean value in the Python interpreter, protected by a mutex. The lock is used by the core bytecode evaluation loop in CPython to set which thread is currently executing statements.</span><br><span class="line"></span><br><span class="line">CPython supports multiple threads within a single interpreter, but threads must request access to the GIL in order to execute Opcodes (low-level operations). This, in turn, means that Python developers can utilize async code, multi-threaded code and never have to worry about acquiring locks on any variables or having processes crash from deadlocks.</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>多进程模块 multiprocessing 可以利用多核， 但是有很大的开销。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">The multiprocessing has 1 major flaw. It has significant overhead, both in time and in memory usage. CPython startup times, even without no-site, are 100–200ms (see https://hackernoon.com/which-is-the-fastest-version-of-python-2ae7c61a6b2b).</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The multiprocessing has 1 major flaw. It has significant overhead, both in time and in memory usage. CPython startup times, even without no-site, are 100–200ms (see https://hackernoon.com/which-is-the-fastest-version-of-python-2ae7c61a6b2b).</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>PEP554 提议把interpreter放入标准库，从而使得利用多核更为方便。开销较小。预计在Python3.8到Python3.9中加入。</p>
 </li>
 </ol>
-<h3 id="评价：为什么要和-golang-抢饭吃呢，能抢过吗。"><a href="#评价：为什么要和-golang-抢饭吃呢，能抢过吗。" class="headerlink" title="评价：为什么要和 golang 抢饭吃呢，能抢过吗。"></a>评价：为什么要和 golang 抢饭吃呢，能抢过吗。</h3><h2 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h2><p><a href="https://coderwall.com/p/cp5fya/measuring-execution-time-in-go" target="_blank" rel="external">https://coderwall.com/p/cp5fya/measuring-execution-time-in-go</a><br>Measuring execution time in Go<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">    start := time.Now()</div><div class="line"></div><div class="line">    r := <span class="built_in">new</span>(big.Int)</div><div class="line">    fmt.Println(r.Binomial(<span class="number">1000</span>, <span class="number">10</span>))</div><div class="line"></div><div class="line">    elapsed := time.Since(start)</div><div class="line">    log.Printf(<span class="string">"Binomial took %s"</span>, elapsed)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h2 id="Share"><a href="#Share" class="headerlink" title="Share"></a>Share</h2><p><a href="https://juejin.im/post/5cdd285b6fb9a0321d73cff3" target="_blank" rel="external">https://juejin.im/post/5cdd285b6fb9a0321d73cff3</a><br>滴滴陶文：我眼中的技术深度</p>
+<h3 id="评价：为什么要和-golang-抢饭吃呢，能抢过吗。"><a href="#评价：为什么要和-golang-抢饭吃呢，能抢过吗。" class="headerlink" title="评价：为什么要和 golang 抢饭吃呢，能抢过吗。"></a>评价：为什么要和 golang 抢饭吃呢，能抢过吗。</h3><h2 id="Tips"><a href="#Tips" class="headerlink" title="Tips"></a>Tips</h2><p><a href="https://coderwall.com/p/cp5fya/measuring-execution-time-in-go" target="_blank" rel="noopener">https://coderwall.com/p/cp5fya/measuring-execution-time-in-go</a><br>Measuring execution time in Go<br><figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    start := time.Now()</span><br><span class="line"></span><br><span class="line">    r := <span class="built_in">new</span>(big.Int)</span><br><span class="line">    fmt.Println(r.Binomial(<span class="number">1000</span>, <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line">    elapsed := time.Since(start)</span><br><span class="line">    log.Printf(<span class="string">"Binomial took %s"</span>, elapsed)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Share"><a href="#Share" class="headerlink" title="Share"></a>Share</h2><p><a href="https://juejin.im/post/5cdd285b6fb9a0321d73cff3" target="_blank" rel="noopener">https://juejin.im/post/5cdd285b6fb9a0321d73cff3</a><br>滴滴陶文：我眼中的技术深度</p>
 <p>其实评委在问你技术深度的时候，并不是问你技术栈的深度（比如是否从像素渲染到硅的提纯都了然于胸），真正在问的是你的竞争力在哪里。</p>
-</div><div class="article-meta"><div class="tags"><i class="icon icon-tag"></i><ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ARTS/">ARTS</a><span class="tag-list-count">2</span></li></ul></div></div><div class="article-comment"><div class="ds-thread" id="ds-thread" data-thread-key="cjvv4jx1r0023t2eiia4g6uw6" data-title="vuuihc ARTS WEEK2" data-url="http://vuuihc.com/2019/05/19/ARTS-WEEK2/" site-name="vuuihc"></div><script>var siteName = document.getElementById('ds-thread').getAttribute('site-name');
-var duoshuoQuery = {short_name: siteName};
-(function() {
-  var ds = document.createElement('script');
-  ds.type = 'text/javascript';ds.async = true;
-  ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-  ds.charset = 'UTF-8';
-  (document.getElementsByTagName('head')[0] 
-  || document.getElementsByTagName('body')[0]).appendChild(ds);
-})();</script></div><ul class="navication"><li class="home"><a href="/"><i class="icon icon-home"></i></a></li><li><a href="/2019/05/12/ARTS-WEEK1/"><i class="icon icon-arror-right"></i></a></li></ul><div class="page-footer"><div class="top"><ul class="social"><li><a href="http://github.com/Professor-Z" title="GitHub" target="_blank"><i class="icon icon-github"></i></a></li><li><a href="http://weibo.com/vuuihc" title="Weibo" target="_blank"><i class="icon icon-weibo"></i></a></li></ul></div><div class="bottom"><p class="copyright">© 2019 vuuihc<br><small>POWER BY <a href="https://hexo.io" target="_blank">HEXO</a></small><small>, THEME BY <a href="https://github.com/BoizZ/hexo-theme-laughing" target="_blank">LAUGHING</a></small></p></div></div></body></html>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ARTS/" rel="tag"># ARTS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/12/ARTS-WEEK1/" rel="next" title="vuuihc ARTS WEEK1">
+                <i class="fa fa-chevron-left"></i> vuuihc ARTS WEEK1
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2019/05/19/ARTS-WEEK2/" data-title="vuuihc ARTS WEEK2" data-url="http://vuuihc.com/2019/05/19/ARTS-WEEK2/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://avatars3.githubusercontent.com/u/3747378?v=3&s=460" alt="vuuihc">
+            
+              <p class="site-author-name" itemprop="name">vuuihc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/vuuihc" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/vuuihc" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.douban.com/people/professorz/" target="_blank" title="豆瓣">
+                      
+                        <i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.zhihu.com/people/z-s-h" target="_blank" title="知乎">
+                      
+                        <i class="fa fa-fw fa-globe"></i>知乎</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Algorithm"><span class="nav-number">1.</span> <span class="nav-text">Algorithm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Review"><span class="nav-number">2.</span> <span class="nav-text">Review</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#评价：为什么要和-golang-抢饭吃呢，能抢过吗。"><span class="nav-number">2.1.</span> <span class="nav-text">评价：为什么要和 golang 抢饭吃呢，能抢过吗。</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tips"><span class="nav-number">3.</span> <span class="nav-text">Tips</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Share"><span class="nav-number">4.</span> <span class="nav-text">Share</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vuuihc</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"proforz"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

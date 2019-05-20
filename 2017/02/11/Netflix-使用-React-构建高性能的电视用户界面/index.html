@@ -1,13 +1,336 @@
-<!DOCTYPE html><html lang="zh-cn"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"><meta name="format-detection" content="telephone=no"><meta name="format-detection" content="email=no"><meta name="description"><meta name="keywords" content="Hexo, Gruntjs, Nodejs, Reactjs, Vuejs"><title>[译]Netflix: 使用 React 构建高性能的电视用户界面 - vuuihc</title><link rel="stylesheet" href="/css/main_style.min.css"><link rel="icon" href="/favicon.ico"></head><body><div class="post-header"><img class="background" src="/default_images/post_background.jpg"><div class="post-title"><h1 class="title">[译]Netflix: 使用 React 构建高性能的电视用户界面</h1><ul class="meta"><li><i class="icon icon-author"></i>vuuihc</li><li><i class="icon icon-clock"></i>17 Minutes</li><li><i class="icon icon-calendar"></i>February 11, 2017</li></ul></div></div><div class="article-content"><ul>
-<li>原文链接: <a href="http://techblog.netflix.com/2017/01/crafting-high-performance-tv-user.html" target="_blank" rel="external">Crafting a high-performance TV user interface using React</a></li>
-<li>原文作者 : <a href="https://twitter.com/madcapnmckay" target="_blank" rel="external">Ian McKay</a></li>
-<li>译文出自 : <a href="https://github.com/xitu/gold-miner" target="_blank" rel="external">掘金翻译计划</a></li>
-<li>译者 : <a href="https://github.com/Professor-Z" target="_blank" rel="external">Professor-Z</a></li>
-<li>校对者 : <a href="https://github.com/SumiMakito" target="_blank" rel="external">SumiMakito</a> <a href="https://github.com/zhouzihanntu" target="_blank" rel="external">zhouzihanntu</a></li>
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="原文链接: Crafting a high-performance TV user interface using React 原文作者 : Ian McKay 译文出自 : 掘金翻译计划 译者 : Professor-Z 校对者 : SumiMakito zhouzihanntu  我们在为 Netflix 会员努力寻找最佳体验的过程中也在不断优化其电视界面。例如，在进行 A/B 测试 、眼球">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[译]Netflix: 使用 React 构建高性能的电视用户界面">
+<meta property="og:url" content="http://vuuihc.com/2017/02/11/Netflix-使用-React-构建高性能的电视用户界面/index.html">
+<meta property="og:site_name" content="vuuihc">
+<meta property="og:description" content="原文链接: Crafting a high-performance TV user interface using React 原文作者 : Ian McKay 译文出自 : 掘金翻译计划 译者 : Professor-Z 校对者 : SumiMakito zhouzihanntu  我们在为 Netflix 会员努力寻找最佳体验的过程中也在不断优化其电视界面。例如，在进行 A/B 测试 、眼球">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://lh4.googleusercontent.com/9S0doBpyo_e_ON1Odxef6Ak3y74xqxIcFL5EjsrFfBUy81gKwu1svsNVxe-nbzdEmymB4kPhPKJEJI5La8iIzNc5opZToVe4GB0g6AuoZU60tGY33-_zvpyuHTJRUQRw50BvoUCx">
+<meta property="og:updated_time" content="2019-05-12T11:55:03.747Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="[译]Netflix: 使用 React 构建高性能的电视用户界面">
+<meta name="twitter:description" content="原文链接: Crafting a high-performance TV user interface using React 原文作者 : Ian McKay 译文出自 : 掘金翻译计划 译者 : Professor-Z 校对者 : SumiMakito zhouzihanntu  我们在为 Netflix 会员努力寻找最佳体验的过程中也在不断优化其电视界面。例如，在进行 A/B 测试 、眼球">
+<meta name="twitter:image" content="https://lh4.googleusercontent.com/9S0doBpyo_e_ON1Odxef6Ak3y74xqxIcFL5EjsrFfBUy81gKwu1svsNVxe-nbzdEmymB4kPhPKJEJI5La8iIzNc5opZToVe4GB0g6AuoZU60tGY33-_zvpyuHTJRUQRw50BvoUCx">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://vuuihc.com/2017/02/11/Netflix-使用-React-构建高性能的电视用户界面/">
+
+
+
+
+
+  <title>[译]Netflix: 使用 React 构建高性能的电视用户界面 | vuuihc</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6cb71e63a793b221e47991b4b89ce937";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">vuuihc</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Talk is cheap, show me the code</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://vuuihc.com/2017/02/11/Netflix-使用-React-构建高性能的电视用户界面/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vuuihc">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/3747378?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vuuihc">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">[译]Netflix: 使用 React 构建高性能的电视用户界面</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-11T13:44:09+08:00">
+                2017-02-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/02/11/Netflix-使用-React-构建高性能的电视用户界面/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/11/Netflix-使用-React-构建高性能的电视用户界面/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ul>
+<li>原文链接: <a href="http://techblog.netflix.com/2017/01/crafting-high-performance-tv-user.html" target="_blank" rel="noopener">Crafting a high-performance TV user interface using React</a></li>
+<li>原文作者 : <a href="https://twitter.com/madcapnmckay" target="_blank" rel="noopener">Ian McKay</a></li>
+<li>译文出自 : <a href="https://github.com/xitu/gold-miner" target="_blank" rel="noopener">掘金翻译计划</a></li>
+<li>译者 : <a href="https://github.com/Professor-Z" target="_blank" rel="noopener">Professor-Z</a></li>
+<li>校对者 : <a href="https://github.com/SumiMakito" target="_blank" rel="noopener">SumiMakito</a> <a href="https://github.com/zhouzihanntu" target="_blank" rel="noopener">zhouzihanntu</a></li>
 </ul>
-<p>我们在为 Netflix 会员努力寻找最佳体验的过程中也在不断优化其电视界面。例如，在进行 <a href="http://techblog.netflix.com/2016/04/its-all-about-testing-netflix.html" target="_blank" rel="external">A/B 测试</a> 、眼球追踪研究以及研究用户反馈之后，我们最近推出了 <a href="https://www.fastcompany.com/3066166/innovation-agents/netflix-launches-video-previews-how-the-company-landed-on-its-biggest-rede" target="_blank" rel="external">视频预览</a> 功能来帮助会员们更好地决定看什么。我们在之前写的 <a href="http://techblog.netflix.com/2013/11/building-new-netflix-experience-for-tv.html" target="_blank" rel="external">一篇文章</a> 中讲到了我们的电视应用是由一个预装在设备上面的 SDK，一个可以随时更新的 JavaScript 应用以及一个被称为 Gibbon 的渲染层组成的。在这篇文章中，我们会着重讲解在优化 JavaScript 应用性能的过程中使用的一些方法。</p>
+<p>我们在为 Netflix 会员努力寻找最佳体验的过程中也在不断优化其电视界面。例如，在进行 <a href="http://techblog.netflix.com/2016/04/its-all-about-testing-netflix.html" target="_blank" rel="noopener">A/B 测试</a> 、眼球追踪研究以及研究用户反馈之后，我们最近推出了 <a href="https://www.fastcompany.com/3066166/innovation-agents/netflix-launches-video-previews-how-the-company-landed-on-its-biggest-rede" target="_blank" rel="noopener">视频预览</a> 功能来帮助会员们更好地决定看什么。我们在之前写的 <a href="http://techblog.netflix.com/2013/11/building-new-netflix-experience-for-tv.html" target="_blank" rel="noopener">一篇文章</a> 中讲到了我们的电视应用是由一个预装在设备上面的 SDK，一个可以随时更新的 JavaScript 应用以及一个被称为 Gibbon 的渲染层组成的。在这篇文章中，我们会着重讲解在优化 JavaScript 应用性能的过程中使用的一些方法。</p>
 <h2 id="React-Gibbon"><a href="#React-Gibbon" class="headerlink" title="React-Gibbon"></a>React-Gibbon</h2><p>在 2015 年，我们开始对电视用户界面架构进行大规模的重写和现代化改造。我们决定使用 React 框架，它的单向数据流和声明式的用户界面开发方式能够让我们更简单的规划整个应用。那时 React 框架还只针对 DOM 设计，我们显然需要一个有自己特色的 React，于是我们很快地创造出一个针对 Gibbon 的原型。这个原型最终进化成为了 React-Gibbon ，我们也开始着手建造基于 React 的用户界面。</p>
-<p>任何接触过 React-DOM 的人都会非常熟悉 React-Gibbon 的 API。最大的不同是，我们只有一个叫做 <figure class="highlight plain"><figcaption><span>的单一支持内联样式的绘图原语，而没有 ```divs```, ```spans```, ```inputs``` 等。 </span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">```javascript</div><div class="line">React.createClass(&#123;</div><div class="line">    render() &#123;</div><div class="line">        return &lt;Widget style=&#123;&#123; text: &apos;Hello World&apos;, textSize: 20 &#125;&#125; /&gt;;</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>任何接触过 React-DOM 的人都会非常熟悉 React-Gibbon 的 API。最大的不同是，我们只有一个叫做 <figure class="highlight plain"><figcaption><span>的单一支持内联样式的绘图原语，而没有 ```divs```, ```spans```, ```inputs``` 等。 </span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">```javascript</span><br><span class="line">React.createClass(&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        return &lt;Widget style=&#123;&#123; text: &apos;Hello World&apos;, textSize: 20 &#125;&#125; /&gt;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
 <h2 id="性能是一个关键的挑战"><a href="#性能是一个关键的挑战" class="headerlink" title="性能是一个关键的挑战"></a>性能是一个关键的挑战</h2><p>我们的应用运行在数百种设备上 —— 从最大的游戏机如 PS4 Pro 到内存和处理器性能都有限的消费电子产品。我们要面对的低端电子设备常常有着低于 1 GHz 的单核 CPU，低内存和有限的图像处理加速能力。让事情更有挑战性的是，我们的 JavaScript 运行环境是没有 JIT 的老版本的 JavaScriptCore。这些限制让实现超高响应的 60 fps 的体验变得尤其棘手，使得 React-Gibbon 和 React-DOM 有了很多差异。</p>
 <h3 id="测量，测量，测量"><a href="#测量，测量，测量" class="headerlink" title="测量，测量，测量"></a>测量，测量，测量</h3><p>在进行性能优化的时候，确定一个用来衡量优化效果的指标显得尤为重要。我们使用如下的指标来测量综合的应用性能：</p>
 <ul>
@@ -17,13 +340,13 @@
 <li>内存占用</li>
 </ul>
 <p>下文概述的策略主要的目标都是提高按键响应速度。它们都在我们的设备上被识别、测试、测量过，但在其它的环境中不一定适用。就像所有的『最佳实践』的建议一样，保持怀疑并确认他们在你的环境中和你的用例中可用是非常重要的。我们使用性能分析工具来识别正在执行的代码路径，以及它们在总渲染时间中的份额； 这让我们观察到了一些有趣的现象。</p>
-<h3 id="观察结果：React-createElement-有成本"><a href="#观察结果：React-createElement-有成本" class="headerlink" title="观察结果：React.createElement 有成本"></a>观察结果：React.createElement 有成本</h3><p>Babel 转义 JSX 时，把 JSX 转换成了一些 React.createElement 函数的调用，这些函数执行后产生下一步要渲染的组件。如果我们能预测 createElement 函数会产生什么，我们就能编译时用期望的结果将函数内联调用而不是在运行时执行函数。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// JSX</span></div><div class="line">render() &#123;</div><div class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">MyComponent</span> <span class="attr">key</span>=<span class="string">'mykey'</span> <span class="attr">prop1</span>=<span class="string">'foo'</span> <span class="attr">prop2</span>=<span class="string">'bar'</span> /&gt;</span>;</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">// 转义后</div><div class="line">render() &#123;</div><div class="line">    return React.createElement(MyComponent, &#123; key: 'mykey', prop1: 'foo', prop2: 'bar' &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 函数内联调用</div><div class="line">render() &#123;</div><div class="line">    return &#123;</div><div class="line">        type: MyComponent,</div><div class="line">        props: &#123;</div><div class="line">            prop1: 'foo', </div><div class="line">            prop2: 'bar'</div><div class="line">        &#125;,</div><div class="line">        key: 'mykey'</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>如你所见，我们完全移除了 createElement 函数调用的成本，一个软件优化上『我们能不能不这样』思维的胜利。<br>我们想知道这个技术是否可以在我们的整个应用中使用，从而完全避免调用 createElement 函数。结果我们发现如果在元素中使用了 ref ，createElement 就需要被调用，以便在运行时连接所有者。如果你使用了 <a href="https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes" target="_blank" rel="external">扩展属性</a> 而其中包含 ref 值，也是同样的道理。（之后我们会重新谈到这一点）</p>
-<p>我们使用了一个定制化的 Babel 插件来进行元素的内联，不过现在你也可以用 <a href="https://babeljs.io/docs/plugins/transform-react-inline-elements/" target="_blank" rel="external">官方插件</a> 来做这件事。这个官方插件会调用一个之后会消失的辅助函数，而不是使用对象字面量，这要归功于 V8 的魔法 <a href="https://ariya.io/2013/04/automatic-inlining-in-javascript-engines" target="_blank" rel="external">函数内联</a>。然而，在使用了我们的插件之后，仍然有不少的组件没有被内联，尤其是在我们应用内占有很大比例的高阶组件。</p>
-<h3 id="问题：-高阶组件不能使用内联"><a href="#问题：-高阶组件不能使用内联" class="headerlink" title="问题： 高阶组件不能使用内联"></a>问题： 高阶组件不能使用内联</h3><p>我们喜欢将 <a href="https://facebook.github.io/react/docs/higher-order-components.html" target="_blank" rel="external">高阶组件</a> 作为 mixin 的替代品。它既能在行为上分层，又能保持关注的分离。我们希望在我们的高阶组件中利用内联的好处，但是我们碰到了一个难题：高阶组件通常表现为他们的属性的传递者。这就自然的引入了属性扩展符，从而阻止 Babel 插件进行内联操作。</p>
-<p>当我们开始重写我们的应用时，我们决定渲染层的所有交互需要经过声明式 API。例如，我们不会这样做：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">componentDidMount() &#123;</div><div class="line">    this.refs.someWidget.focus()</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>相反地，为了把应用的焦点移动到一个特殊的 Widget，我们实现了一个声明式的聚焦 API，它使得我们可以描述哪个组件应该在渲染的时候被聚焦，像下面的代码这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">render() &#123;</div><div class="line">    return &lt;Widget focused=&#123;true&#125; /&gt;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>这种写法能给我们带来意外的好处，让我们在整个应用中都避免了使用 ref。所以，不管代码中是否用到了扩展运算符，我们都可以使用内联技术。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">// 内联调用之前</div><div class="line">render() &#123;</div><div class="line">    return &lt;MyComponent &#123;...this.props&#125; /&gt;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 内联调用之后</div><div class="line">render() &#123;</div><div class="line">    return &#123;</div><div class="line">        type: MyComponent,</div><div class="line">        props: this.props</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="观察结果：React-createElement-有成本"><a href="#观察结果：React-createElement-有成本" class="headerlink" title="观察结果：React.createElement 有成本"></a>观察结果：React.createElement 有成本</h3><p>Babel 转义 JSX 时，把 JSX 转换成了一些 React.createElement 函数的调用，这些函数执行后产生下一步要渲染的组件。如果我们能预测 createElement 函数会产生什么，我们就能编译时用期望的结果将函数内联调用而不是在运行时执行函数。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// JSX</span></span><br><span class="line">render() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">MyComponent</span> <span class="attr">key</span>=<span class="string">'mykey'</span> <span class="attr">prop1</span>=<span class="string">'foo'</span> <span class="attr">prop2</span>=<span class="string">'bar'</span> /&gt;</span>;</span></span><br><span class="line"><span class="xml">&#125;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">// 转义后</span></span><br><span class="line"><span class="xml">render() &#123;</span></span><br><span class="line"><span class="xml">    return React.createElement(MyComponent, &#123; key: 'mykey', prop1: 'foo', prop2: 'bar' &#125;);</span></span><br><span class="line"><span class="xml">&#125;</span></span><br><span class="line"><span class="xml"></span></span><br><span class="line"><span class="xml">// 函数内联调用</span></span><br><span class="line"><span class="xml">render() &#123;</span></span><br><span class="line"><span class="xml">    return &#123;</span></span><br><span class="line"><span class="xml">        type: MyComponent,</span></span><br><span class="line"><span class="xml">        props: &#123;</span></span><br><span class="line"><span class="xml">            prop1: 'foo', </span></span><br><span class="line"><span class="xml">            prop2: 'bar'</span></span><br><span class="line"><span class="xml">        &#125;,</span></span><br><span class="line"><span class="xml">        key: 'mykey'</span></span><br><span class="line"><span class="xml">    &#125;;</span></span><br><span class="line"><span class="xml">&#125;</span></span><br></pre></td></tr></table></figure></p>
+<p>如你所见，我们完全移除了 createElement 函数调用的成本，一个软件优化上『我们能不能不这样』思维的胜利。<br>我们想知道这个技术是否可以在我们的整个应用中使用，从而完全避免调用 createElement 函数。结果我们发现如果在元素中使用了 ref ，createElement 就需要被调用，以便在运行时连接所有者。如果你使用了 <a href="https://facebook.github.io/react/docs/jsx-in-depth.html#spread-attributes" target="_blank" rel="noopener">扩展属性</a> 而其中包含 ref 值，也是同样的道理。（之后我们会重新谈到这一点）</p>
+<p>我们使用了一个定制化的 Babel 插件来进行元素的内联，不过现在你也可以用 <a href="https://babeljs.io/docs/plugins/transform-react-inline-elements/" target="_blank" rel="noopener">官方插件</a> 来做这件事。这个官方插件会调用一个之后会消失的辅助函数，而不是使用对象字面量，这要归功于 V8 的魔法 <a href="https://ariya.io/2013/04/automatic-inlining-in-javascript-engines" target="_blank" rel="noopener">函数内联</a>。然而，在使用了我们的插件之后，仍然有不少的组件没有被内联，尤其是在我们应用内占有很大比例的高阶组件。</p>
+<h3 id="问题：-高阶组件不能使用内联"><a href="#问题：-高阶组件不能使用内联" class="headerlink" title="问题： 高阶组件不能使用内联"></a>问题： 高阶组件不能使用内联</h3><p>我们喜欢将 <a href="https://facebook.github.io/react/docs/higher-order-components.html" target="_blank" rel="noopener">高阶组件</a> 作为 mixin 的替代品。它既能在行为上分层，又能保持关注的分离。我们希望在我们的高阶组件中利用内联的好处，但是我们碰到了一个难题：高阶组件通常表现为他们的属性的传递者。这就自然的引入了属性扩展符，从而阻止 Babel 插件进行内联操作。</p>
+<p>当我们开始重写我们的应用时，我们决定渲染层的所有交互需要经过声明式 API。例如，我们不会这样做：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">componentDidMount() &#123;</span><br><span class="line">    this.refs.someWidget.focus()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>相反地，为了把应用的焦点移动到一个特殊的 Widget，我们实现了一个声明式的聚焦 API，它使得我们可以描述哪个组件应该在渲染的时候被聚焦，像下面的代码这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">render() &#123;</span><br><span class="line">    return &lt;Widget focused=&#123;true&#125; /&gt;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这种写法能给我们带来意外的好处，让我们在整个应用中都避免了使用 ref。所以，不管代码中是否用到了扩展运算符，我们都可以使用内联技术。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// 内联调用之前</span><br><span class="line">render() &#123;</span><br><span class="line">    return &lt;MyComponent &#123;...this.props&#125; /&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// 内联调用之后</span><br><span class="line">render() &#123;</span><br><span class="line">    return &#123;</span><br><span class="line">        type: MyComponent,</span><br><span class="line">        props: this.props</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>这极大地减少了之前我们不得不做的函数调用和属性合并的操作的数量，但它并没有完全的消除他们的影响。</p>
 <h3 id="问题：属性拦截仍然需要合并操作"><a href="#问题：属性拦截仍然需要合并操作" class="headerlink" title="问题：属性拦截仍然需要合并操作"></a>问题：属性拦截仍然需要合并操作</h3><p>在我们成功地把我们的组件内联化之后，我们的应用仍然在高阶组件中耗费大量的时间进行属性合并。这并不奇怪，因为高阶组件经常拦截新来的属性，在其中某些属性值中做一些改变或者添加自己的属性进去，然后再转发给内部的封装组件。</p>
 <p>我们在设备上分析了高阶组件的层叠数随着属性数量和组件深度的变化关系，分析的结果为我们提供了一些有用的信息。</p>
@@ -32,16 +355,16 @@
 <p><strong>属性太多会让你的应用死掉</strong></p>
 <p>基于我们的研究，我们意识到，可以通过限制层层传递的属性数量来对我们的应用性能进行大幅度的提升。我们发现很多组属性集合经常是相关的并且同时发生改变。在这种情况下，把这些相关属性在一个单一命名空间的属性里面集合起来是很有意义的。如果一个命名空间的属性集合可以被建模为一个不可变值，后续的对 shouldComponentUpdate 函数的调用就可以被优化，通过只检测引用指向的是否是同一个值而不是对对象进行深层比较。这算是一些好的成果，但最终我们发现我们已经尽可能的减少了属性数量。现在是时候采取更极端的措施了。</p>
 <p><strong>合并属性，无需遍历所有属性值</strong></p>
-<p>注意，此处可能有坑！这种做法一般不推荐，而且很有可能以奇怪的意外的方式打乱很多事情。<br>在减少了应用中传递的属性数量之后，我们开始实验其它方法，希望可以减少在高阶组件之间进行属性合并所耗费的时间。我们意识到可以通过使用原型链来完成同样的事情，从而避免进行属性遍历。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">// proto merge 之前</div><div class="line">render() &#123;</div><div class="line">    const newProps = Object.assign(&#123;&#125;, this.props, &#123; prop1: &apos;foo&apos; &#125;)</div><div class="line">    return &lt;MyComponent &#123;...newProps&#125; /&gt;;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// proto merge 之后</div><div class="line">render() &#123;</div><div class="line">    const newProps = &#123; prop1: &apos;foo&apos; &#125;;</div><div class="line">    newProps.__proto__ = this.props;</div><div class="line">    return &#123;</div><div class="line">        type: MyComponent,</div><div class="line">        props: newProps</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>在上面这个例子中，我们成功地把一个有100个属性传递100层的情况的渲染时间从 500ms 左右降到了 60ms。注意，使用这个方法会引入一些有趣的 bug，比如说，this.props 是一个 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze" target="_blank" rel="external">冻结对象</a> 的情况。当这种情况发生时，原型链方法仅在创建 newProps 对象后分配 <strong>proto</strong> 时有效。不用说，如果你不是 newProps 的所有者，那么分配原型是不明智的。</p>
+<p>注意，此处可能有坑！这种做法一般不推荐，而且很有可能以奇怪的意外的方式打乱很多事情。<br>在减少了应用中传递的属性数量之后，我们开始实验其它方法，希望可以减少在高阶组件之间进行属性合并所耗费的时间。我们意识到可以通过使用原型链来完成同样的事情，从而避免进行属性遍历。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">// proto merge 之前</span><br><span class="line">render() &#123;</span><br><span class="line">    const newProps = Object.assign(&#123;&#125;, this.props, &#123; prop1: &apos;foo&apos; &#125;)</span><br><span class="line">    return &lt;MyComponent &#123;...newProps&#125; /&gt;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// proto merge 之后</span><br><span class="line">render() &#123;</span><br><span class="line">    const newProps = &#123; prop1: &apos;foo&apos; &#125;;</span><br><span class="line">    newProps.__proto__ = this.props;</span><br><span class="line">    return &#123;</span><br><span class="line">        type: MyComponent,</span><br><span class="line">        props: newProps</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在上面这个例子中，我们成功地把一个有100个属性传递100层的情况的渲染时间从 500ms 左右降到了 60ms。注意，使用这个方法会引入一些有趣的 bug，比如说，this.props 是一个 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze" target="_blank" rel="noopener">冻结对象</a> 的情况。当这种情况发生时，原型链方法仅在创建 newProps 对象后分配 <strong>proto</strong> 时有效。不用说，如果你不是 newProps 的所有者，那么分配原型是不明智的。</p>
 <h3 id="问题：比对样式很慢"><a href="#问题：比对样式很慢" class="headerlink" title="问题：比对样式很慢"></a>问题：比对样式很慢</h3><p>一旦 React 知道了它需要渲染的元素，它一定会把这些元素和之前的元素进行比对，以决定必须应用在真实 DOM 元素上面的最小的改变。通过分析我们发现这个过程成本很高，尤其是在 mount 的过程中 —— 部分原因是需要遍历大量的样式属性值。</p>
 <p><strong>基于是否可能改变来区分样式属性</strong></p>
-<p>我们发现通常我们设置的许多属性从来没被实际改变过。举个例子，我们有一个 Widget 被用来展示一些动态文字，它有 text, textSize, textWeight 和 textColor 这些属性。text 这个属性在这个 Widget 的生命周期中会改变，但其它的属性我们希望保持不变。比对这 4 个样式属性会在每次渲染都有成本，我们可以通过把可能改变的属性和不会改变的属性分开来消除这个成本。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">const memoizedStylesObject = &#123; textSize: 20, textWeight: ‘bold’, textColor: ‘blue’ &#125;;</div></pre></td></tr></table></figure></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;Widget staticStyle=&#123;memoizedStylesObject&#125; style=&#123;&#123; text: this.props.text &#125;&#125; /&gt;</div></pre></td></tr></table></figure>
+<p>我们发现通常我们设置的许多属性从来没被实际改变过。举个例子，我们有一个 Widget 被用来展示一些动态文字，它有 text, textSize, textWeight 和 textColor 这些属性。text 这个属性在这个 Widget 的生命周期中会改变，但其它的属性我们希望保持不变。比对这 4 个样式属性会在每次渲染都有成本，我们可以通过把可能改变的属性和不会改变的属性分开来消除这个成本。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">const memoizedStylesObject = &#123; textSize: 20, textWeight: ‘bold’, textColor: ‘blue’ &#125;;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;Widget staticStyle=&#123;memoizedStylesObject&#125; style=&#123;&#123; text: this.props.text &#125;&#125; /&gt;</span><br></pre></td></tr></table></figure>
 <p>如果我们谨慎地记忆了这个 memoizedStylesObject 对象，React-Gibbon 就可以检查引用相等，而且只有在引用不相等的时候改变它的值。这对 mount 组件的时间没有影响，但是对每个后续的重新渲染的成本有影响。</p>
 <p><strong>为什么不避免所有的遍历？</strong></p>
 <p>我们来更深入的讨论一下这个想法，如果我们知道在一个特定的组件上面有哪些样式属性被设置了，我们可以写一个不用遍历任何属性键的函数来做之前相同的工作。我们写了一个定制化的 Babel 插件，它可以在组件的渲染方法上面做一些静态分析。它会辨别哪一些样式将会被使用，然后构建一个定制化的 『比对差异 —— 应用更改』的函数，并把这个函数添加到组件的属性里面。 </p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//这个函数是静态分析插件产生的</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">__update__</span>(<span class="params">widget, nextProps, prevProps</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> style = nextProps.style,</div><div class="line">        prev_style = prevProps &amp;&amp; prevProps.style;</div><div class="line"></div><div class="line"></div><div class="line">    <span class="keyword">if</span> (prev_style) &#123;</div><div class="line">        <span class="keyword">var</span> text = style.text;</div><div class="line">        <span class="keyword">if</span> (text !== prev_style.text) &#123;</div><div class="line">            widget.text = text;</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        widget.text = style.text;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">React.createClass(&#123;</div><div class="line">    render() &#123;</div><div class="line">        <span class="keyword">return</span> (</div><div class="line">            <span class="xml"><span class="tag">&lt;<span class="name">Widget</span> <span class="attr">__update__</span>=<span class="string">&#123;__update__&#125;</span> <span class="attr">style</span>=<span class="string">&#123;&#123;</span> <span class="attr">text:</span> <span class="attr">this.props.title</span> &#125;&#125;  /&gt;</span></span></div><div class="line">        );</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//这个函数是静态分析插件产生的</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">__update__</span>(<span class="params">widget, nextProps, prevProps</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> style = nextProps.style,</span><br><span class="line">        prev_style = prevProps &amp;&amp; prevProps.style;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (prev_style) &#123;</span><br><span class="line">        <span class="keyword">var</span> text = style.text;</span><br><span class="line">        <span class="keyword">if</span> (text !== prev_style.text) &#123;</span><br><span class="line">            widget.text = text;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        widget.text = style.text;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">React.createClass(&#123;</span><br><span class="line">    render() &#123;</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            &lt;Widget __update__=&#123;__update__&#125; style=&#123;&#123; <span class="attr">text</span>: <span class="keyword">this</span>.props.title &#125;&#125;  /&gt;</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 <p>在内部，React-Gibbon 会查找这个特殊的 <strong>update</strong> 属性，跳过常规的遍历以前的样式属性和下一个样式属性的过程，取而代之的是，如果 <strong>update</strong> 监测的样式属性有变化，就直接应用这些属性变化到组件上去。这对我们的（应用）渲染时间有巨大的影响，当然这以增加可分发大小为代价。</p>
 <h2 id="性能是个特点"><a href="#性能是个特点" class="headerlink" title="性能是个特点"></a>性能是个特点</h2><p>我们应用的运行环境是独一无二的，但是我们用来寻求性能提升机会的技术却是通用的。我们在真实的设备上面测量、测试和验证了我们所有的改进。这些调查研究让我们发现了一个共同的问题：遍历所有属性代价是昂贵的。因此，我们在我们的应用中辨别属性合并过程，然后决定它们是否能被优化。下面列出了我们在提高性能方面所做的一些其他工作：</p>
 <ul>
@@ -50,13 +373,424 @@
 <li>组件放入组件池</li>
 <li>对昂贵计算进行记忆化处理</li>
 </ul>
-</div><div class="article-meta"></div><div class="article-comment"><div class="ds-thread" id="ds-thread" data-thread-key="cjvv4jx8k0043t2eij5ehyil7" data-title="[译]Netflix: 使用 React 构建高性能的电视用户界面" data-url="http://vuuihc.com/2017/02/11/Netflix-使用-React-构建高性能的电视用户界面/" site-name="vuuihc"></div><script>var siteName = document.getElementById('ds-thread').getAttribute('site-name');
-var duoshuoQuery = {short_name: siteName};
-(function() {
-  var ds = document.createElement('script');
-  ds.type = 'text/javascript';ds.async = true;
-  ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
-  ds.charset = 'UTF-8';
-  (document.getElementsByTagName('head')[0] 
-  || document.getElementsByTagName('body')[0]).appendChild(ds);
-})();</script></div><ul class="navication"><li class="home"><a href="/"><i class="icon icon-home"></i></a></li><li><a href="/2017/02/16/译-JavaScript-启动性能探究/"><i class="icon icon-arror-left"></i></a></li><li><a href="/2017/01/10/leetcode-27-Remove-Element/"><i class="icon icon-arror-right"></i></a></li></ul><div class="page-footer"><div class="top"><ul class="social"><li><a href="http://github.com/Professor-Z" title="GitHub" target="_blank"><i class="icon icon-github"></i></a></li><li><a href="http://weibo.com/vuuihc" title="Weibo" target="_blank"><i class="icon icon-weibo"></i></a></li></ul></div><div class="bottom"><p class="copyright">© 2019 vuuihc<br><small>POWER BY <a href="https://hexo.io" target="_blank">HEXO</a></small><small>, THEME BY <a href="https://github.com/BoizZ/hexo-theme-laughing" target="_blank">LAUGHING</a></small></p></div></div></body></html>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/10/leetcode-27-Remove-Element/" rel="next" title="[leetcode]27. Remove Element">
+                <i class="fa fa-chevron-left"></i> [leetcode]27. Remove Element
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/16/译-JavaScript-启动性能探究/" rel="prev" title="[译] JavaScript 启动性能探究">
+                [译] JavaScript 启动性能探究 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div class="ds-thread" data-thread-key="2017/02/11/Netflix-使用-React-构建高性能的电视用户界面/" data-title="[译]Netflix: 使用 React 构建高性能的电视用户界面" data-url="http://vuuihc.com/2017/02/11/Netflix-使用-React-构建高性能的电视用户界面/">
+      </div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="https://avatars3.githubusercontent.com/u/3747378?v=3&s=460" alt="vuuihc">
+            
+              <p class="site-author-name" itemprop="name">vuuihc</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/vuuihc" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-globe"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/vuuihc" target="_blank" title="微博">
+                      
+                        <i class="fa fa-fw fa-globe"></i>微博</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.douban.com/people/professorz/" target="_blank" title="豆瓣">
+                      
+                        <i class="fa fa-fw fa-globe"></i>豆瓣</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://www.zhihu.com/people/z-s-h" target="_blank" title="知乎">
+                      
+                        <i class="fa fa-fw fa-globe"></i>知乎</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#React-Gibbon"><span class="nav-number">1.</span> <span class="nav-text">React-Gibbon</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能是一个关键的挑战"><span class="nav-number">2.</span> <span class="nav-text">性能是一个关键的挑战</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#测量，测量，测量"><span class="nav-number">2.1.</span> <span class="nav-text">测量，测量，测量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#观察结果：React-createElement-有成本"><span class="nav-number">2.2.</span> <span class="nav-text">观察结果：React.createElement 有成本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题：-高阶组件不能使用内联"><span class="nav-number">2.3.</span> <span class="nav-text">问题： 高阶组件不能使用内联</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题：属性拦截仍然需要合并操作"><span class="nav-number">2.4.</span> <span class="nav-text">问题：属性拦截仍然需要合并操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#问题：比对样式很慢"><span class="nav-number">2.5.</span> <span class="nav-text">问题：比对样式很慢</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能是个特点"><span class="nav-number">3.</span> <span class="nav-text">性能是个特点</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">vuuihc</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"proforz"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
