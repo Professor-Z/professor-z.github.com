@@ -239,6 +239,178 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://vuuihc.com/2017/03/02/这项浏览器调整使-Facebook-收到的网络请求减少了-60/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="vuuihc">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/3747378?v=3&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="vuuihc">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/03/02/这项浏览器调整使-Facebook-收到的网络请求减少了-60/" itemprop="url">[译] 这项浏览器调整使 Facebook 收到的网络请求减少了 60%</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-02T22:50:45+08:00">
+                2017-03-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/03/02/这项浏览器调整使-Facebook-收到的网络请求减少了-60/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/02/这项浏览器调整使-Facebook-收到的网络请求减少了-60/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<ul>
+<li>原文地址：<a href="https://code.facebook.com/posts/557147474482256" target="_blank" rel="noopener">This browser tweak saved 60% of requests to Facebook</a></li>
+<li>原文作者：<a href="https://www.facebook.com/n8s" target="_blank" rel="noopener">Nate Schloss </a> <a href="https://www.facebook.com/bmaurer" target="_blank" rel="noopener">Ben Maurer </a></li>
+<li>译文出自：<a href="https://github.com/xitu/gold-miner" target="_blank" rel="noopener">掘金翻译计划</a></li>
+<li>译者：<a href="https://github.com/vuuihc" target="_blank" rel="noopener">vuuihc</a></li>
+<li>校对者：<a href="https://github.com/lorinlee" target="_blank" rel="noopener">lorinlee</a>、<a href="https://github.com/Airmacho" target="_blank" rel="noopener">Airmacho</a></li>
+</ul>
+</blockquote>
+<p>在过去两年里，我们 Facebook 一直与浏览器厂商合作，以求改进浏览器的缓存效果。合作的成果是，Chrome 和 Firefox 最近推出的功能使其缓存机制在我们和整个网络上的效率显著提高。在这些改进的帮助下，发向我们服务器的静态资源请求数量减少了 60％，因此大大提高了网页加载时间。（静态资源是指服务器从磁盘上读取的文件，服务器不用运行任何额外的代码便能对外提供它们）这篇文章将详细说明为了得到这样的效果，我们联合 Chrome 和 Firefox 做了什么 —— 不过我们需要先定义一些概念和语义环境，这有助于解释我们需要解决的问题。首先要讲的是 —— 重新验证。</p>
+<h2 id="每次重新验证意味着另一个请求"><a href="#每次重新验证意味着另一个请求" class="headerlink" title="每次重新验证意味着另一个请求"></a>每次重新验证意味着另一个请求</h2><p>当你浏览网页时，浏览器经常会重复使用相同的资源，例如不同页面中相同的 logo 或 JavaScript 代码。如果浏览器需要重复地下载这些资源，是非常浪费的。</p>
+<p>为了避免重复下载，HTTP 服务器可以为每个请求指定过期时间和验证机制，这可以指示浏览器在资源过期之前不需要重复下载。过期时间通过 HTTP header 中的 Cache-Control 字段发送，它告诉浏览器可以在什么时间内重复使用最新的响应。而验证机制允许响应即使过期也可以被浏览器重复使用。它允许浏览器向服务器确认资源是否仍然有效，是否可重复使用之前的响应。验证机制通过HTTP header 中的 Last-Modified 或 Etag 字段定义。</p>
+<p>下面这个示例中的资源会一个小时后过期，同时它具有 Last-Modified 验证机制。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ curl https://example.com/foo.png</span><br><span class="line">&gt; GET /foo.png</span><br><span class="line"></span><br><span class="line">&lt; 200 OK</span><br><span class="line">&lt; last-modified: Mon, 17 Oct 2016 00:00:00 GMT</span><br><span class="line">&lt; cache-control: max-age=3600</span><br><span class="line">&lt;image data&gt;</span><br></pre></td></tr></table></figure>
+<p>在这个示例中，在接下来的一小时内，接收到此响应的浏览器可以重复使用它，无需再向 example.com 发送请求。之后，浏览器必须通过发送条件请求来重新验证资源，以确认图片是否仍是最新的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ curl https://example.com/foo.png -H &apos;if-modified-since: Mon, 17 Oct 2016 00:00:00 GMT&apos;</span><br><span class="line">&gt; GET /foo.png</span><br><span class="line">&gt; if-modified-since: Mon, 17 Oct 2016 00:00:00 GMT</span><br><span class="line"></span><br><span class="line">如果图片没被修改，返回：</span><br><span class="line">&lt; 304 Not Modified</span><br><span class="line">&lt; last-modified: Mon, 17 Oct 2016 00:00:00 GMT</span><br><span class="line"></span><br><span class="line">&lt; cache-control: max-age=3600</span><br><span class="line">如果图片被修改了，则返回：</span><br><span class="line">&lt; 200 OK</span><br><span class="line">&lt; last-modified: Tue, 18 Oct 2016 00:00:00 GMT</span><br><span class="line">&lt; cache-control: max-age=3600</span><br><span class="line">&lt;image data&gt;</span><br></pre></td></tr></table></figure>
+<p>如果资源未被修改，则服务器会发送未修改（304）响应。这比再次传输整个资源要好，因为要传输的数据更少，但是它不会消除浏览器与服务器通信带来的延迟。每次服务器返回未修改（304）响应时，浏览器早已拥有了它想要的资源。我们希望通过允许客户端缓存更长时间来避免这些浪费的重新验证。</p>
+<h2 id="指示长时间内无需重新下载"><a href="#指示长时间内无需重新下载" class="headerlink" title="指示长时间内无需重新下载"></a>指示长时间内无需重新下载</h2><p>重新验证让我们面对一个棘手的问题：过期时间应该是多久？如果你设定一个小时的过期时间，浏览器将必须每小时都与服务器通信，以确认资源是否被修改。许多像 logo 或 JavaScript 代码这类的资源很少改变; 在这些情况下每小时检查是不必要的。另一方面，如果过期时间很长，浏览器将一直从缓存中获取资源，就有可能会显示过期的资源。</p>
+<p>为了解决这个问题，Facebook 使用内容定址 URL 的概念。我们的 URL 不是描述逻辑资源的 URL（如『logo.png』，『library.js』），而是我们内容的哈希。每次发布网站时，对每个静态资源进行哈希。我们维护一个数据库来存储这些哈希值并将哈希值映射到它们的内容。当服务器提供资源时，我们创建一个具有哈希值的 URL，而不是按名称提供。例如，如果 logo.png 的哈希是 abc123，我们使用URL <a href="http://www.facebook.com/rsrc.php/abc123.png。" target="_blank" rel="noopener">http://www.facebook.com/rsrc.php/abc123.png。</a> </p>
+<p>因为该方案使用文件内容的哈希作为 URL，所以它提供了重要的保证：内容定址 URL 的指向的内容从不改变。因此，我们为所有内容定址 URL 提供很长的过期时间（目前一年）。此外，因为 URL 的内容永远不会改变，对于所有有关静态资源的条件请求，我们的服务器将始终响应 304 未修改。这节省了CPU周期，同时让我们更快地响应此类请求。</p>
+<h2 id="刷新带来的问题"><a href="#刷新带来的问题" class="headerlink" title="刷新带来的问题"></a><strong>刷新</strong>带来的问题</h2><p>浏览器的刷新按钮使得用户可以获取当前页面的更新的版本。当点击刷新时，即使该网页尚未过期，浏览器也会重新验证当前所在的网页。然而除此之外，还会重新验证页面上的所有子资源 —— 如图像和 JavaScript 文件。</p>
+<p><img src="https://fb-s-b-a.akamaihd.net/h-ak-xft1/v/t39.2365-6/16180599_874188502721113_3142477830743392256_n.jpg?oh=9c4bf394a5afd5a0131ba067d08276d7&amp;oe=59014047&amp;__gda__=1497375933_9340577d36aaabad4acd088c4fc18028" alt> </p>
+<p>子资源的重验证意味着即使用户已经访问过他们正在刷新的站点，每个子资源仍必须请求到服务器重验证一次。在使用内容定址 URL （如Facebook）的网站上，这些重新验证请求是徒劳的。 内容定址 URL 的内容从不改变，因此重新验证总是得到 304 未修改响应。 换句话说，重新验证、请求和花费在整个过程上的资源在一开始就是不必要的。 </p>
+<h2 id="条件请求太多"><a href="#条件请求太多" class="headerlink" title="条件请求太多"></a><strong>条件请求</strong>太多</h2><p>2014 年，我们发现 60％ 的静态资源请求会得到 304 响应。由于内容定址 URL 永远不会改变，这意味着有机会优化掉 60％ 的静态资源请求。 在 <a href="https://www.facebook.com/notes/facebook-engineering/under-the-hood-data-diving-with-scuba/10150599692628920/" target="_blank" rel="noopener">Scuba</a> 的帮助下 ，我们开始研究条件请求的数据。我们注意到，不同浏览器的表现之间存在巨大差异。</p>
+<p><img src="https://fb-s-c-a.akamaihd.net/h-ak-xat1/v/t39.2365-6/16180519_427963810928354_1151983436504760320_n.jpg?oh=1ac60c43dd09ea9cabfeab1066c2d1ed&amp;oe=58FDE361&amp;__gda__=1493046161_b41dc531b43ad09f295b50d434b0fd5e" alt></p>
+<p>发现 Chrome 浏览器有最多的 304 响应之后，我们开始与他们合作，想搞清楚为什么它发送这么多的条件请求。</p>
+<h2 id="Chrome"><a href="#Chrome" class="headerlink" title="Chrome"></a>Chrome</h2><p><a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%2F%2B%2F540d0cca0eba6e24679387bb67e49d459969e6e9%2Fthird_party%2FWebKit%2FSource%2Fcore%2Ffetch%2FResourceFetcher.cpp%23694&amp;h=ATO2x3tC1sAclxR_QrD21IcupxuN2NbANCU78fkU46N01s58gKPyZh4mtvMiF7I5gLkyTtC4ZPorIb3D36SnOmYCKMGvCCJfe0yiBDxkUMIr-48kqo4HVmUJe76xQv-OkQ&amp;s=1" target="_blank" rel="noopener">Chrome 的一行源码</a> 回答了我们的问题。这一行代码列出了几个 Chrome 可能会要求重新验证页面上的资源的原因，包括了用户点击刷新。其中一个例子是，我们发现 Chrome 会重新验证 POST 请求返回的网页上的所有资源。Chrome 团队告诉我们，这样做的理由是，POST 请求往往是发生在更改网页信息的情况（例如进行购买或发送电子邮件），此时用户希望拥有最新的网页。但是，像Facebook这样的网站在登录过程中会使用 POST 请求。每次用户登录到 Facebook 时，浏览器都会忽略其缓存，并重新验证所有以前下载的资源。我们与 Chrome 的产品经理和工程师合作，确定了此行为是 Chrome 独有的，而且是不必要的。在修正这一点后，Chrome 的条件请求占所有请求的比例从 63％ 降低到了 24％。</p>
+<p><img src="https://fb-s-c-a.akamaihd.net/h-ak-xta1/v/t39.2365-6/16179999_1203000506482917_4550616913532682240_n.jpg?oh=78c4419eacba0b55767eb83d06d46bcd&amp;oe=593AADEE&amp;__gda__=1496929877_0d2c692fdd8cb12489a92c13a520d3c0" alt></p>
+<p>我们与 Chrome 在登录问题上的合作是一个很好的例子，展现了 Facebook 如何和浏览器团队合作来快速解决一个错误。一般来说，当我们查看数据时，我们经常按浏览器分开查看。如果我们发现一个浏览器的数据异常，它表明这个浏览器中的某些东西可以优化。 然后，我们可以与浏览器厂商一起解决问题。</p>
+<p>虽然有些成果，但来自 Chrome 的条件请求的百分比仍然高于其他浏览器，这表明仍然有一些改进的机会。我们开始研究刷新的过程，结果发现 Chrome 将同址访问视为刷新，而其他浏览器则不会这样。同址访问是指用户在地址栏输入当前已加载网页的网址并尝试访问。Chrome 修复了同址访问的问题，但我们没有看到很大的提升效果。我们开始跟 Chrome 小组讨论改变刷新按钮的行为。</p>
+<p>改变刷新按钮的重新验证机制是对 Web 上的长期设计的更改。然而，讨论到这个问题，我们意识到开发者不可能会依赖这种机制。网站的最终用户不知道资源过期时间和条件请求是什么。虽然一些用户可能在他们想要更新页面时按下刷新按钮，但 Facebook 的统计数据显示，大多数用户都不使用刷新按钮。因此，如果开发人员正在更改过期时间为 X 的资源，则开发人员必须情愿用户使用旧的数据直至其过期，或者用户必须修改 URL。如果开发人员已经更改了资源，那么没有理由重新验证子资源。</p>
+<p>业界对于如何处理这个问题有一些争论，我们提出了一个折中的方案，max-age 较大的资源永远不被重新验证，但是对于 max-age 较短的资源将使用旧的策略。Chrome 团队考虑这个问题之后决定对所有资源进行应用新的策略。你可以在 <a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fblog.chromium.org%2F2017%2F01%2Freload-reloaded-faster-and-leaner-page_26.html&amp;h=ATM_ZozpQRZEWgHaKWKNv4OdlqdB-_GfKB2c_SkvV9sXFcPB8GCAHq9o1i-8mfvcG1vINh49zimRYr4jkmvew54-gpW9Vftqw0No-D-zYywwjLVHcCuq7WyfsZrQAmRv3g&amp;s=1" target="_blank" rel="noopener">这里</a> 查看他们的处理过程。由于 Chrome 的一揽子方针，所有开发人员和网站自身无需任何改变就可受益于这一改进。</p>
+<p><img src="https://fb-s-b-a.akamaihd.net/h-ak-xtp1/v/t39.2365-6/16327422_662197940655602_5747554978155724800_n.jpg?oh=a3e0473f124544ff94d2f2f85080d92e&amp;oe=59342FE7&amp;__gda__=1496491292_e0d6d4e4f83041883f1ebddba4455f61" alt> </p>
+<p>在这个例子中可以看到，以前在刷新的页面上每个子资源都需要一个网络请求，而现在不同，可以直接从缓存中读取每个文件，从而不会被网络请求阻塞。</p>
+<p>Chrome 发布这个终极改进之后，来自 Chrome 浏览器的条件请求的百分比急剧下降 —— 对于 Facebook 和用户是一个皆大欢喜的事情，服务器需要响应的 304 未修改的请求减少了，用户则能够更快地刷新网页。</p>
+<h2 id="Firefox"><a href="#Firefox" class="headerlink" title="Firefox"></a>Firefox</h2><p>解决了 Chrome 的问题后，我们开始与其他浏览器厂商讨论刷新按钮的行为。我们向 Firefox <a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fbugzilla.mozilla.org%2Fshow_bug.cgi%3Fid%3D1267474&amp;h=ATMZWq3XILESCXL2Uo0bOYK533wWyDAAKD69lM0YUVqNXRjzNWDov_sp0BQof83Fsl52mBvwlvz22SSldeAv-UDG9lpZrsbjcMN4mGIuDrceTqp7-CZtrD3i--RFcltAuA&amp;s=1" target="_blank" rel="noopener">提交了一个 bug</a> ，但是他们选择不改变刷新按钮长期以来默认的行为。相反，他们团队实现了我们的工程师提出的一个<a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fwww.ietf.org%2Fmail-archive%2Fweb%2Fhttpbisa%2Fcurrent%2Fmsg25463.html&amp;h=ATPDjZ49Z-nBPp_GzP9c6-ZBmvCdvij1zMObscv3RPpz5Pw5om726NFaOzB4xc-5W5qbZaitgKQdMf534Lgv4bG8-I8CM59tgSMq26urQRjo6Ix626fJ77q5tK-_XhnWmQ&amp;s=1" target="_blank" rel="noopener">方案</a>，给某些资源添加新的 Cache-Control header，告诉浏览器这个资源永远不需要被重新验证。这个 header 背后的想法是，它是开发人员给予浏览器的一个额外的承诺，承诺这个资源在其最大生命周期内永远不会改变。Firefox选择以 <code>cache-control:immutable</code>  header 的形式实现这个指令。</p>
+<p>有了这个添加的 header，现在向 Facebook 请求资源时将会得到类似下面这样的响应：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ curl https://example.com/foo.png</span><br><span class="line">&gt; GET /foo.png</span><br><span class="line">    </span><br><span class="line">&lt; 200 OK</span><br><span class="line">&lt; last-modified: Mon, 17 Oct 2016 00:00:00 GMT</span><br><span class="line">&lt; cache-control: max-age=3600, immutable</span><br><span class="line">&lt;image data&gt;</span><br></pre></td></tr></table></figure>
+<p>Firefox 很快实现了 <code>cache-control:immutable</code> 这一机制，并在 Chrome 全面发行其对刷新行为的终极改进的时候推出了这一机制。你可以在 <a href="https://l.facebook.com/l.php?u=https%3A%2F%2Fhacks.mozilla.org%2F2017%2F01%2Fusing-immutable-caching-to-speed-up-the-web%2F&amp;h=ATPlpvy6viRY3IThq2PSQFIuzSkd6fGeHb26V6X7kf8LWPShGs1CaOVLU7heN6SCS4yEBEFQSgv1phHYMZoT8v3aRo_P1xc6n_KhkyvOg6mJKNcmcf0NJ4-py-mhnQBqXg&amp;s=1" target="_blank" rel="noopener">这里</a> 阅读更多关于 Firefox 的改进的内容。</p>
+<p>按照 Firefox 的方案，我们会有些开发成本。但是我们修改服务端代码添加 immutable header 后，得到了一些很好的结果。</p>
+<h2 id="改进之后"><a href="#改进之后" class="headerlink" title="改进之后"></a>改进之后</h2><p>Chrome 和 Firefox 的改进措施使得从这些现代浏览器发出的重新验证请求大大减少。这减少了我们服务器的带宽压力，更重要的是提高了访问 Facebook 的用户的加载速度。</p>
+<p>不幸的是，这种改变是难以准确测量改进效果的 —— 浏览器的新版本包含如此多的改进，几乎不可能隔离特定改进的影响。不过，在测试此改进时，Chrome 团队执行 A/B 测试后发现使用 3G 网络的手机用户，所有网站中 90% 的刷新速度提高了 1.6 秒。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这是一项棘手的工作，因为我们要求改变长期存在的网络行为。但它表明了 Web 浏览器<strong>可以</strong>而且<strong>已经</strong>与 Web 开发人员共同努力，为每个人创造更好地网络环境。我们很高兴在 Chrome 和 Firefox 团队中有与我们建立良好的合作关系的朋友，并对我们能够持续合作以改善每个人的网络而感到兴奋。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://vuuihc.com/2017/02/16/译-JavaScript-启动性能探究/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -826,144 +998,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://vuuihc.com/2016/11/04/lib-flexible使用总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="vuuihc">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/3747378?v=3&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="vuuihc">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/11/04/lib-flexible使用总结/" itemprop="url">lib-flexible 使用总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-11-04T21:50:04+08:00">
-                2016-11-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/11/04/lib-flexible使用总结/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/04/lib-flexible使用总结/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><code>lib-flexible</code> 是淘宝前端团队开源的一种用于移动端跨屏适配的『可伸缩布局方案』。主要部分（另一部分是栅格方案，此处不表）代码总共117行，原理也非常简单（本文后附源码注释）。</p>
-<h2 id="解决的问题"><a href="#解决的问题" class="headerlink" title="解决的问题"></a>解决的问题</h2><p><code>lib-flexible</code>主要解决了开发者的两大痛点。第一是移动端设备的视口宽度（也即 window.innerWidt 也即viewport*initial-scale）各不相同，如果按照电脑端的开发风格（使用 px）来设置页面元素尺寸，会使得不同设备上布局风格差别很大。理想的方式是按照固定比例设置元素尺寸，但如果使用百分比，由于 CSS 的相关规则，实现起来会比较复杂。</p>
-<p>rem 的出现对解决这个问题提供了很大的帮助。rem 含义是页面根元素（也即 html 标签）上设置的 font-size 值，在整个页面范围内，rem 的值是不变的。这样，我们便可以这样解决元素尺寸跨屏适配问题：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.将 rem 单位与设备视口宽度挂钩。比如，lib-flexible 中设置的 1 rem 便是视口宽度的 1/10。</span><br><span class="line"></span><br><span class="line">2.将设计稿中元素尺寸与视口宽度的关系反映到 px 单位与 rem 单位的换算中去。</span><br></pre></td></tr></table></figure></p>
-<p>这样多设备适配的问题便有了很好的解决方案。</p>
-<p><code>lib-flexible</code> 解决的第二个问题是 retina 屏幕设备显示效果问题。如果按照设备本来的视口宽度实现元素尺寸，会导致设备像素比（dpr:window.devicePixelRatio）较高的屏幕上出现 1 px border 问题，同时图片也会看起来不够清晰。这都是由于高 dpr 设备中 CSS 的 1px 宽度代表了设备上的 dpr 宽度。如果能够使得 CSS 的 1px 确实能表示设备上的1小格，上述问题便能迎刃而解。</p>
-<p><code>lib-flexible</code> 通过设置 meta 元素中的 viewport 值中的 initial-scale 字段对页面进行缩放(innerWidth = device-width/initial-scale)，将设备 dpr 改为了1。解决了上述问题。</p>
-<h2 id="缺点"><a href="#缺点" class="headerlink" title="缺点"></a>缺点</h2><p>虽然lib-flexible 解决了上述问题，但也带来了一些其它的问题。</p>
-<p>1.与其他代码兼容</p>
-<p>由于引入了高清屏适配，因而所有本页面内的 html 元素的尺寸都必须使用 rem 为单位才能达到跨屏适配的效果，这就使得兼容没有使用高清屏幕适配的代码成为了问题。而解决这个问题只有两个办法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.在 meta 中设置 initial-sale=1 禁用掉高清屏缩放，这样便能直接使用以 px 为单位的代码，这样最为简单，但同时那些 以px 为单位布局的元素还是会有多屏尺寸不一致的问题微信开源的 weui.css 便是一个例子。</span><br><span class="line"></span><br><span class="line">2.不修改 initial-scale ，重写之前的代码，也应用 rem 方案，只是这样会增加一定的工作成本。</span><br></pre></td></tr></table></figure></p>
-<h2 id="源码注释"><a href="#源码注释" class="headerlink" title="源码注释"></a>源码注释</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line">;(<span class="function"><span class="keyword">function</span>(<span class="params">win, lib</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> doc = win.document;</span><br><span class="line">    <span class="keyword">var</span> docEl = doc.documentElement;</span><br><span class="line">    <span class="keyword">var</span> metaEl = doc.querySelector(<span class="string">'meta[name="viewport"]'</span>);</span><br><span class="line">    <span class="keyword">var</span> flexibleEl = doc.querySelector(<span class="string">'meta[name="flexible"]'</span>);</span><br><span class="line">    <span class="keyword">var</span> dpr = <span class="number">0</span>;<span class="comment">//设备像素比，与缩放比例程倒数关系</span></span><br><span class="line">    <span class="keyword">var</span> scale = <span class="number">0</span>;<span class="comment">//缩放比例</span></span><br><span class="line">    <span class="keyword">var</span> tid;</span><br><span class="line">    <span class="keyword">var</span> flexible = lib.flexible || (lib.flexible = &#123;&#125;);</span><br><span class="line">    <span class="comment">//通过已有的 viewport 或 flexible 标签设置 scale 和 dpr。</span></span><br><span class="line">    <span class="comment">// 优先级为：1,viewport 2，flexible 标签中的 initial-dpr 值 3，flexible 标签中的 maximum-dpr 值</span></span><br><span class="line">    <span class="keyword">if</span> (metaEl) &#123;</span><br><span class="line">        <span class="built_in">console</span>.warn(<span class="string">'将根据已有的meta标签来设置缩放比例'</span>);</span><br><span class="line">        <span class="keyword">var</span> match = metaEl.getAttribute(<span class="string">'content'</span>).match(<span class="regexp">/initial\-scale=([\d\.]+)/</span>);</span><br><span class="line">        <span class="keyword">if</span> (match) &#123;</span><br><span class="line">            scale = <span class="built_in">parseFloat</span>(match[<span class="number">1</span>]);</span><br><span class="line">            dpr = <span class="built_in">parseInt</span>(<span class="number">1</span> / scale);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (flexibleEl) &#123;<span class="comment">//不太懂这里有什么用，后面也没有设置 flexible ,猜测可能是淘宝团队之前约定使用此标签处理相关问题</span></span><br><span class="line">        <span class="keyword">var</span> content = flexibleEl.getAttribute(<span class="string">'content'</span>);</span><br><span class="line">        <span class="keyword">if</span> (content) &#123;</span><br><span class="line">            <span class="keyword">var</span> initialDpr = content.match(<span class="regexp">/initial\-dpr=([\d\.]+)/</span>);</span><br><span class="line">            <span class="keyword">var</span> maximumDpr = content.match(<span class="regexp">/maximum\-dpr=([\d\.]+)/</span>);</span><br><span class="line">            <span class="keyword">if</span> (initialDpr) &#123;</span><br><span class="line">                dpr = <span class="built_in">parseFloat</span>(initialDpr[<span class="number">1</span>]);</span><br><span class="line">                scale = <span class="built_in">parseFloat</span>((<span class="number">1</span> / dpr).toFixed(<span class="number">2</span>));    </span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (maximumDpr) &#123;</span><br><span class="line">                dpr = <span class="built_in">parseFloat</span>(maximumDpr[<span class="number">1</span>]);</span><br><span class="line">                scale = <span class="built_in">parseFloat</span>((<span class="number">1</span> / dpr).toFixed(<span class="number">2</span>));    </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//如果没有设置 viewport 和 flexible 标签值</span></span><br><span class="line">    <span class="keyword">if</span> (!dpr &amp;&amp; !scale) &#123;</span><br><span class="line">        <span class="keyword">var</span> isAndroid = win.navigator.appVersion.match(<span class="regexp">/android/gi</span>);</span><br><span class="line">        <span class="keyword">var</span> isIPhone = win.navigator.appVersion.match(<span class="regexp">/iphone/gi</span>);</span><br><span class="line">        <span class="keyword">var</span> devicePixelRatio = win.devicePixelRatio;</span><br><span class="line">        <span class="keyword">if</span> (isIPhone) &#123;</span><br><span class="line">            <span class="comment">// iOS下，根据window.devicePixelRatio 来设置 dpr 值</span></span><br><span class="line">            <span class="keyword">if</span> (devicePixelRatio &gt;= <span class="number">3</span> &amp;&amp; (!dpr || dpr &gt;= <span class="number">3</span>)) &#123;                </span><br><span class="line">                dpr = <span class="number">3</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (devicePixelRatio &gt;= <span class="number">2</span> &amp;&amp; (!dpr || dpr &gt;= <span class="number">2</span>))&#123;</span><br><span class="line">                dpr = <span class="number">2</span>;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                dpr = <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//安卓设备设置 dpr = 1</span></span><br><span class="line">            dpr = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        scale = <span class="number">1</span> / dpr;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//设置 data-dpr 值</span></span><br><span class="line">    docEl.setAttribute(<span class="string">'data-dpr'</span>, dpr);</span><br><span class="line">    <span class="comment">// 如果没有 viewport 值，设置 scale 值，并禁止缩放，添加 viewport 信息到head、</span></span><br><span class="line">    <span class="keyword">if</span> (!metaEl) &#123;</span><br><span class="line">        metaEl = doc.createElement(<span class="string">'meta'</span>);</span><br><span class="line">        metaEl.setAttribute(<span class="string">'name'</span>, <span class="string">'viewport'</span>);</span><br><span class="line">        metaEl.setAttribute(<span class="string">'content'</span>, <span class="string">'initial-scale='</span> + scale + <span class="string">', maximum-scale='</span> + scale + <span class="string">', minimum-scale='</span> + scale + <span class="string">', user-scalable=no'</span>);</span><br><span class="line">        <span class="keyword">if</span> (docEl.firstElementChild) &#123;</span><br><span class="line">            docEl.firstElementChild.appendChild(metaEl);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">var</span> wrap = doc.createElement(<span class="string">'div'</span>);</span><br><span class="line">            wrap.appendChild(metaEl);</span><br><span class="line">            doc.write(wrap.innerHTML);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 设置 rem 值为设备宽度 1/10，如果页面宽度/dpr 超过 540 则按照 540</span></span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">refreshRem</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        <span class="keyword">var</span> width = docEl.getBoundingClientRect().width;</span><br><span class="line">        <span class="keyword">if</span> (width / dpr &gt; <span class="number">540</span>) &#123;</span><br><span class="line">            width = <span class="number">540</span> * dpr;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">var</span> rem = width / <span class="number">10</span>;</span><br><span class="line">        docEl.style.fontSize = rem + <span class="string">'px'</span>;</span><br><span class="line">        flexible.rem = win.rem = rem;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//在 resize 和 pageshow 事件 300ms 后重新设置 rem 值</span></span><br><span class="line">    win.addEventListener(<span class="string">'resize'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        clearTimeout(tid);</span><br><span class="line">        tid = setTimeout(refreshRem, <span class="number">300</span>);</span><br><span class="line">    &#125;, <span class="literal">false</span>);</span><br><span class="line">    win.addEventListener(<span class="string">'pageshow'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (e.persisted) &#123;</span><br><span class="line">            clearTimeout(tid);</span><br><span class="line">            tid = setTimeout(refreshRem, <span class="number">300</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="literal">false</span>);</span><br><span class="line">    <span class="comment">//文档加载完成之后 设置 body 标签的 font-size ，消除rem 对字体的影响</span></span><br><span class="line">    <span class="keyword">if</span> (doc.readyState === <span class="string">'complete'</span>) &#123;</span><br><span class="line">        doc.body.style.fontSize = <span class="number">12</span> * dpr + <span class="string">'px'</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        doc.addEventListener(<span class="string">'DOMContentLoaded'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">            doc.body.style.fontSize = <span class="number">12</span> * dpr + <span class="string">'px'</span>;</span><br><span class="line">        &#125;, <span class="literal">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    refreshRem();</span><br><span class="line">    <span class="comment">//在 lib.flexible 上注册一些属性值和方法</span></span><br><span class="line">    flexible.dpr = win.dpr = dpr;</span><br><span class="line">    flexible.refreshRem = refreshRem;</span><br><span class="line">    flexible.rem2px = <span class="function"><span class="keyword">function</span>(<span class="params">d</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> val = <span class="built_in">parseFloat</span>(d) * <span class="keyword">this</span>.rem;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> d === <span class="string">'string'</span> &amp;&amp; d.match(<span class="regexp">/rem$/</span>)) &#123;</span><br><span class="line">            val += <span class="string">'px'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">    &#125;</span><br><span class="line">    flexible.px2rem = <span class="function"><span class="keyword">function</span>(<span class="params">d</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> val = <span class="built_in">parseFloat</span>(d) / <span class="keyword">this</span>.rem;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">typeof</span> d === <span class="string">'string'</span> &amp;&amp; d.match(<span class="regexp">/px$/</span>)) &#123;</span><br><span class="line">            val += <span class="string">'rem'</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> val;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;)(<span class="built_in">window</span>, <span class="built_in">window</span>[<span class="string">'lib'</span>] || (<span class="built_in">window</span>[<span class="string">'lib'</span>] = &#123;&#125;));</span><br></pre></td></tr></table></figure>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1016,7 +1050,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1027,7 +1061,7 @@
               
               <div class="site-state-item site-state-categories">
                 
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">分类</span>
                 
               </div>
@@ -1103,7 +1137,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
