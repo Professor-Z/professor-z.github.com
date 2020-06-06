@@ -92,7 +92,7 @@ baidu_analytics: 6cb71e63a793b221e47991b4b89ce937
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
 - type: git
-  repo: git@git.coding.net:vuuihc/vuuihc.git
+  repo: git@e.coding.net:vuuihc/vuuihc.git
   branch: coding-pages
 # - type: git
 #   repo: git@github.com:vuuihc/vblog.git
